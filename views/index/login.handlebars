@@ -1,0 +1,13 @@
+{{> _navbar}}
+<div class="container-sm">
+    {{> _alerts}}
+    <div class="card p-4 my-5">
+        <form action="/hb/login" method="post">
+            <input type="text" name="username" placeholder="username" />
+            <input type="password" name="password" placeholder="password" />
+
+            <button type="submit" class="btn btn-dark btn-block">Login</button>
+        </form>
+
+    </div>
+</div>

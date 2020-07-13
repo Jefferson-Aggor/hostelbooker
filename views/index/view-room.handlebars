@@ -1,0 +1,46 @@
+{{> _navbar}}
+
+<div class="container">
+    <div class="my-5">
+        {{> _alerts}}
+<div class="grid-2">
+        <div class="preview-layout">
+                <div class="main-image"></div>
+                <div class="sub-images">
+                    <div id="photo-1-placeholder"></div>
+                    <div id="photo-2-placeholder"></div>
+                    <div id="photo-3-placeholder"></div>
+                    <div id="photo-4-placeholder"></div>
+                </div>
+            </div>
+            <div class="details bg-light">
+                <div class="text-center">
+                    <span class="mx-1">ghs</span><span class="text-red large">{{room.price}}</span>
+                </div>
+                <div class="description">
+                    desc : {{room.description}}
+                </div>
+                    {{#if room.ac}}
+                        ac: true
+                    {{/if}}
+                    {{#if room.kitchen}}
+                        kitchen: true
+                    {{/if}}
+                    {{#if room.porch}}
+                        porch: true
+                    {{/if}}
+                    {{#if room.wardrobe}}
+                        wardrobe: true
+                    {{/if}}
+
+                    <div class="book-room">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModalLong">
+                        Book
+                    </button>
+                    {{> _modal_trigger}}
+                    </div>
+                   
+            </div>
+    </div>
+    </div>
+</div>

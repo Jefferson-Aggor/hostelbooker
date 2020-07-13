@@ -1,0 +1,33 @@
+<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">
+                                Please fill out this form
+                            </h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/hb/book-room/{{room._id}}" method="post">
+                                <input type="hidden" name='hostel_id' value="{{room.hostel._id}}">
+                                <input type="hidden" name='hostel_name' value="{{room.hostel.name}}">
+                                <input type="text" name="name" id="" placeholder="enter full name"  />
+                                <input type="email" name="email" id="" placeholder="enter email" required />
+                                <input type="tel" name="contact" id="" placeholder="Contact" required />
+                                <input type="text" name="roomType" id="" placeholder="Room type" value="{{room.room}}" readonly />
+                                <textarea name="expections" id="" cols="30" rows="5"
+                                    placeholder="Your expectation"></textarea>
+
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-success">
+                                        Make Booking
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>

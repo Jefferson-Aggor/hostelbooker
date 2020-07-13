@@ -1,0 +1,54 @@
+<!-- showcase -->
+<header id="showcase">
+    <nav class="navbar border-bottom">
+        <div class="container">
+            <a class="lead text-center">Hostel Booker</a>
+            <ul class="my-2">
+                <li><a href="/" class="">Home</a></li>
+                <li><a href="/hb/register" class="">
+                        <i class="fas fa-user hide-sm"></i>
+                        <span>Register</span>
+                    </a></li>
+                <li><a href="/hb/login">
+                        <i class="fas fa-user hide-sm"></i>
+                        <span>Login</span>
+                    </a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="showcase-container">
+            <div class="showcase-content text-center">
+                <h1>Hello</h1>
+                <p>Lorem, ipsum dolor.</p>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- Locations -->
+
+<section id="locations" style="min-height: 50vh;">
+    <div class="container">
+        {{> _alerts}}
+        <p class="large">
+
+        <h3>Select Location</h3>
+        </p>
+        <div class="grid-3 my-3">
+            {{#each hostels}}
+            <ul class="locations">
+                <li class="flex">
+                    <i class="fas fa-globe"></i>
+                    <a href="/hb/locality-hostels/{{location}}">{{location}}</a>
+
+                </li>
+            </ul>
+            {{/each}}
+        </div>
+    </div>
+</section>
+
+
+<footer>
+    <div class="text-center">&copy; hostel book 2020</div>
+</footer>

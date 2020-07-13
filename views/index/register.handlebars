@@ -1,0 +1,50 @@
+{{> _navbar}}
+<div class="container-md">
+    <form action="/hb/register" method="post" class="my-5">
+        <div>
+            <input type="text" name="name" id="nameOfHostel" placeholder="Enter name of hostel" required />
+        </div>
+        <!-- email and tel -->
+        <div class="grid-2">
+            <input type="email" name="email" id="email" placeholder="Email" required />
+            <input type="tel" name="phone" id="tel" placeholder="Phone number" required />
+        </div>
+        <!-- location -->
+        <div class="my-2">
+            <select name="location" id="location" name="location" required>
+                <option value="" selected disabled>Select Location</option>
+                <div class="divider"></div>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+        </div>
+        <!-- description -->
+        <div class="description">
+            <textarea name="description" id="description" cols="10" rows="5" placeholder="Description"
+                required></textarea>
+        </div>
+
+        <!-- main-image -->
+
+        <div class="grid-2 my-3">
+            <div>
+                <p>Select Image</p>
+                <input type="file" name="main-image" id="mainImage" />
+            </div>
+            <div id="preview"></div>
+        </div>
+
+        <!-- passwords -->
+        <div class="password">
+            <input type="password" name="password" id="password" placeholder="Password" required />
+            <p class="text-center text-red">
+                * Password must be greater than 6 characters
+            </p>
+        </div>
+        <button type="submit" class="btn btn-block btn-dark">
+            Register Hostel
+        </button>
+    </form>
+</div>

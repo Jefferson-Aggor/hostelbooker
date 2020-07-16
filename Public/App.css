@@ -729,11 +729,9 @@ table th {
     justify-content: center;
   }
 
-  .sub-images #photo-1-placeholder,
-  .sub-images #photo-2-placeholder,
-  .sub-images #photo-3-placeholder,
-  .sub-images #photo-4-placeholder {
-    height: 50px;
-    width: 50px;
+  .side-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
   }
 }

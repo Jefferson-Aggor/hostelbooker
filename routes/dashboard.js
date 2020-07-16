@@ -46,13 +46,7 @@ const eagerOptions = { eager: [{ quality: 60 }] };
 // post room
 router.post(
   "/rooms",
-  multerDestination(`./room-images`).fields([
-    { name: "main-image", maxCount: 1 },
-    { name: "photo-1", maxCount: 1 },
-    { name: "photo-2", maxCount: 1 },
-    { name: "photo-3", maxCount: 1 },
-    { name: "photo-4", maxCount: 1 },
-  ]),
+  multerDestination("./room-images").single("image"),
   (req, res) => {
     const {
       room,
@@ -66,41 +60,38 @@ router.post(
       monoBeds,
     } = req.body;
 
-    let newRoom = {
-      room,
-      price,
-      description,
-      bathroom: validateCheckbox(bathroom, "on"),
-      kitchen: validateCheckbox(kitchen, "on"),
-      ac: validateCheckbox(ac, "on"),
-      porch: validateCheckbox(porch, "on"),
-      wardrobe: validateCheckbox(wardrobe, "on"),
-      monoBeds: validateCheckbox(monoBeds, "on"),
-      hostel: req.user._id,
-    };
-
-    let images = [];
-
-    // cloudinary.uploader.upload(req.files['main-image'][0].path,eagerOptions,cb)
-    // function cb (err,result){
-    //   if(err){
-    //     console.log(err)
-    //   }else{
-    //   return result.eager[0].secureUrls
-    //   }
-    // }
-
-    new Room(newRoom)
-      .save()
-      .then((room) => {
-        req.flash("success_msg", "Room successfully added");
-        res.redirect("/hb/dashboard");
-      })
-      .catch((err) => {
-        console.log(err.message);
-        req.flash("error_msg", "Room not added, Try again");
-        res.redirect("/hb/dashboard");
-      });
+    // set image to cloudinary
+    cloudinary.uploader.upload(req.file.path, eagerOptions, (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        const newRoom = {
+          room,
+          price,
+          description,
+          porch: validateCheckbox(porch, "on"),
+          wardrobe: validateCheckbox(wardrobe, "on"),
+          monoBeds: validateCheckbox(monoBeds, "on"),
+          bathroomInside: validateCheckbox(bathroom, "on"),
+          ac: validateCheckbox(ac, "on"),
+          kitchen: validateCheckbox(kitchen, "on"),
+          mainRoomImage: result.eager[0].secure_url,
+          hostel: req.user._id,
+        };
+        new Room(newRoom)
+          .save()
+          .then((room) => {
+            console.log(room);
+            req.flash("success_msg", "Room added !!");
+            res.redirect("/hb/dashboard");
+          })
+          .catch((err) => {
+            req.flash("error_msg", "Room not added!!");
+            res.redirect("/hb/dashboard");
+            console.log(err);
+          });
+      }
+    });
   }
 );
 

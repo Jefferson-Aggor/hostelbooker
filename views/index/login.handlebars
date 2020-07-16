@@ -1,13 +1,31 @@
 {{> _navbar}}
-<div class="container-sm">
-    {{> _alerts}}
-    <div class="card p-4 my-5">
-        <form action="/hb/login" method="post">
-            <input type="text" name="username" placeholder="username" />
-            <input type="password" name="password" placeholder="password" />
+<section id="login" class=" py-5">
+    <div class="container">
+        {{> _alerts}}
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h4>
+                            <i class="fas fa-sign-in-alt"></i> Login</h4>
+                    </div>
+                    <div class="card-body">
+                        <form action="/hb/login" method="post">
+                            <div class="form-group">
+                                <label for="username">Username</label>
+                                <input type="text" name="username" class="form-control" required>
+                            </div>
 
-            <button type="submit" class="btn btn-dark btn-block">Login</button>
-        </form>
+                            <div class="form-group">
+                                <label for="password2">Password</label>
+                                <input type="password" name="password" class="form-control" required>
+                            </div>
 
+                            <input type="submit" value="Login" class="btn bg-primary btn-block">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</section>

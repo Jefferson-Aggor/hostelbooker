@@ -1,4 +1,4 @@
-<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+{{!-- <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
                 aria-labelledby="exampleModalLongTitle" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
@@ -30,4 +30,58 @@
                         </div>
                     </div>
                 </div>
+ </div> --}}
+
+
+<div class="modal fade" id="inquiryModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="inquiryModalLabel">Book This Room</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
             </div>
+            <div class="modal-body">
+                <form action="/hb/book-room/{{room._id}}" method="POST">
+                    <input type="hidden" name='hostel_id' value="{{room.hostel._id}}">
+                    <input type="hidden" name='price' value="{{room.price}}">
+                    <input type="hidden" name='hostel_name' value="{{room.hostel.name}}">
+                    <input type="hidden" name='hostel_email' value="{{room.hostel.email}}">
+                    <input type="hidden" name='room_id' value="{{room._id}}">
+                    <div class="form-group">
+                        <label for="property_name" class="col-form-label">Room:</label>
+                        <input type="text" name="roomType" class="form-control" value="{{room.room}}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input type="text" name="name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" class="col-form-label">Email:</label>
+                        <input type="email" name="email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" class="col-form-label">Phone:</label>
+                        <input type="text" name="contact" class="form-control">
+                    </div>
+                    <div class="my-2">
+                        <label for="sex" class="col-form-label">Sex:</label>
+                        <select name="sex" id="sex" required>
+                            <div class="divider"></div>
+                            <option value="male">male</option>
+                            <option value="female">female</option>
+
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" class="col-form-label">Expectation:</label>
+                        <textarea name="expectations" class="form-control"></textarea>
+                    </div>
+                    <hr>
+                    <input type="submit" value="Book Room" class="btn btn-block bg-primary">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

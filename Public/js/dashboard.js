@@ -9,10 +9,6 @@ const porch = document.getElementById("porch");
 const wardrobe = document.getElementById("wardrobe");
 const monoBeds = document.getElementById("mono-beds");
 const mainImage = document.getElementById("main-image");
-const photo_1 = document.getElementById("photo-1");
-const photo_2 = document.getElementById("photo-2");
-const photo_3 = document.getElementById("photo-3");
-const photo_4 = document.getElementById("photo-4");
 const previewBtn = document.getElementById("view-preview");
 const hidePreviewBtn = document.getElementById("hide-preview");
 const previewAddRooms = document.getElementById("preview-add-rooms");
@@ -20,17 +16,14 @@ const previewAddRooms = document.getElementById("preview-add-rooms");
 // placeholders
 const roomTypePlaceholder = document.getElementById("room-type-placeholder");
 const mainImagePlaceholder = document.getElementById("main-image-placeholder");
-const photo_1_placeholder = document.getElementById("photo-1-placeholder");
-const photo_2_placeholder = document.getElementById("photo-2-placeholder");
-const photo_3_placeholder = document.getElementById("photo-3-placeholder");
-const photo_4_placeholder = document.getElementById("photo-4-placeholder");
-const descriptionPlaceholder = document.getElementById(
-  "description-placeholder"
-);
+
 const pricePlaceholder = document.getElementById("price-placeholder");
 // will call the accessories here later
 const insideBathroomPlaceholder = document.getElementById(
   "insideBathroom-placeholder"
+);
+const descriptionPlaceholder = document.getElementById(
+  "description-placeholder"
 );
 const kitchenPlaceholder = document.getElementById("kitchen-placeholder");
 const acPlaceholder = document.getElementById("ac-placeholder");
@@ -92,10 +85,6 @@ const imageReplacer = function (parent, placeholder) {
 };
 
 imageReplacer(mainImage, document.querySelector(".main-image"));
-imageReplacer(photo_1, photo_1_placeholder);
-imageReplacer(photo_2, photo_2_placeholder);
-imageReplacer(photo_3, photo_3_placeholder);
-imageReplacer(photo_4, photo_4_placeholder);
 
 checker(insideBathroom, insideBathroomPlaceholder);
 checker(kitchen, kitchenPlaceholder);

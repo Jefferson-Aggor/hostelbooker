@@ -19,9 +19,17 @@ const bookSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "user",
   },
+  room: {
+    type: Schema.Types.ObjectId,
+    ref: "room",
+  },
   roomType: {
     type: String,
-    required:true
+    required: true,
+  },
+  sex: {
+    type: String,
+    required: true,
   },
   date: {
     type: Date,

@@ -19,6 +19,9 @@ const { mongoURI } = require("./config/keys");
 const index = require("./routes/index");
 const dashboard = require("./routes/dashboard");
 
+// handlebar helpers
+const { formatDate } = require("./hbs/helper");
+
 // Make static dir
 app.use(express.static(path.join(__dirname, "Public")));
 
@@ -29,7 +32,10 @@ app.use(bodyParser.json());
 // handlebars
 app.engine(
   "handlebars",
-  exphbs({ handlebars: allowInsecurePrototypeAccess(Handlebars) })
+  exphbs({
+    handlebars: allowInsecurePrototypeAccess(Handlebars),
+    helpers: { formatDate },
+  })
 );
 app.set("view engine", "handlebars");
 

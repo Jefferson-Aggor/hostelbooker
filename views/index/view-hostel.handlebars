@@ -1,6 +1,6 @@
 {{> _navbar}}
 
-<div class="container">
+{{!-- <div class="container">
     <div class="my-5">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
@@ -52,4 +52,63 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4">View Our Rooms</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="listings" class="py-4">
+    <div class="container">
+        <div class="row">
+            <!-- Listing 1 -->
+            {{#each room}}
+            {{#if mainImage}}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card listing-preview">
+                    <img class="card-img-top" src="{{mainImage}}" alt="">
+                    <div class="card-img-overlay">
+                        <h2>
+                            <span class="badge badge-primary text-white p">ghs {{price}}</span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="listing-heading text-center">
+                            <h5>
+                                <i class="fas fa-map-marker text-secondary"></i> {{room}}
+                            </h5>
+                        </div>
+                        <hr>
+                        <a href="/hb/view-room/{{_id}}" class="btn btn-primary btn-block">View Room</a>
+                    </div>
+                </div>
+            </div>
+            {{else}}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="card listing-preview">
+                    <img class="card-img-top" src="/assets/img/homes/home-1.jpg" alt="">
+                    <div class="card-img-overlay">
+                        <h2>
+                            <span class="badge badge-primary text-white p">ghs {{price}}</span>
+                        </h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="listing-heading text-center">
+                            <h5>
+                                <i class="fas fa-map-marker text-secondary"></i> {{room}}
+                            </h5>
+                        </div>
+                        <hr>
+                        <a href="/hb/view-room/{{_id}}" class="btn btn-primary btn-block">View Room</a>
+                    </div>
+                </div>
+            </div>
+            {{/if}}
+            {{/each}}
+        </div>
+    </div>
+</section>

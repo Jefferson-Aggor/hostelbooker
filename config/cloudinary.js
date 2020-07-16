@@ -7,15 +7,4 @@ const cloudinaryConfig = cloudinary.config({
   api_secret: api_secret,
 });
 
-const imageFieldChecker = function (path, obj, eagerOptions) {
-  if (path) {
-    cloudinary.uploader.upload(path.path, eagerOptions, (error, result) => {
-      if (error) throw error.message;
-      if (result) {
-        return (obj.main_image = result.eager[0].secure_url);
-      }
-    });
-  }
-};
-
-module.exports = { cloudinaryConfig, imageFieldChecker };
+module.exports = { cloudinaryConfig };

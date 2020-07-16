@@ -11,7 +11,7 @@ const Book = mongoose.model("book");
 // require files
 const validateCheckbox = require("../helpers/checkboxValidation");
 const { multerDestination } = require("../helpers/helpers");
-const { cloudinaryConfig, imageFieldChecker } = require("../config/cloudinary");
+const { cloudinaryConfig } = require("../config/cloudinary");
 cloudinaryConfig;
 
 const requireLogin = require("../config/requireLogin");
@@ -28,17 +28,24 @@ router.get("/", requireLogin, (req, res) => {
           res.render("dashboard/dashboard", { user: req.user, room, book });
         });
     })
-    .catch((err) => console.log(err.message));
+    .catch((err) =>
+      res.render("helpers/errors", {
+        msg: "Oops. Bad network connection. Try again",
+      })
+    );
 });
 
 // get room edit route;
 router.get("/edit/:_id", requireLogin, (req, res) => {
   Room.findOne({ _id: req.params._id })
+    .populate("hostel")
     .then((room) => {
-      res.send(room);
+      res.render("dashboard/edit", { room });
     })
     .catch((err) => {
-      res.send(err);
+      res.render("helpers/errors", {
+        msg: "Sorry, Something bad happened. Try again",
+      });
     });
 });
 
@@ -81,18 +88,74 @@ router.post(
         new Room(newRoom)
           .save()
           .then((room) => {
-            console.log(room);
             req.flash("success_msg", "Room added !!");
             res.redirect("/hb/dashboard");
           })
           .catch((err) => {
             req.flash("error_msg", "Room not added!!");
             res.redirect("/hb/dashboard");
-            console.log(err);
           });
       }
     });
   }
 );
+
+// edit room
+router.put(
+  "/edit/:_id",
+  multerDestination("./room-images/edited").single("image"),
+  (req, res) => {
+    Room.findOne({ _id: req.params._id }).then((room) => {
+      cloudinary.uploader.upload(
+        req.file.path,
+        eagerOptions,
+        (error, result) => {
+          if (error) {
+            req.flash("error_msg", "Something bad happened. Try again");
+            res.redirect(`/hb/dashboard/edit/${req.params._id}`);
+          } else {
+            (room.room = req.body.room),
+              (room.price = req.body.price),
+              (room.description = req.body.description),
+              (room.porch = validateCheckbox(req.body.porch, "on")),
+              (room.wardrobe = validateCheckbox(req.body.wardrobe, "on")),
+              (room.ac = validateCheckbox(req.body.ac, "on")),
+              (room.monoBeds = validateCheckbox(req.body.monoBeds, "on")),
+              (room.bathroomInside = validateCheckbox(req.body.bathroom, "on")),
+              (room.kitchen = validateCheckbox(req.body.kitchen, "on")),
+              (room.mainRoomImage = result.eager[0].secure_url);
+
+            room
+              .save()
+              .then((editted) => {
+                req.flash(
+                  "success_msg",
+                  "Room has been updated. Back to dashboard"
+                );
+                res.redirect(`/hb/dashboard/edit/${req.params._id}`);
+              })
+              .catch((err) => {
+                req.flash("error_msg", "Something bad happened. Try again");
+                res.redirect(`/hb/dashboard/edit/${req.params._id}`);
+              });
+          }
+        }
+      );
+    });
+  }
+);
+
+// delete room;
+router.delete("/delete/:_id", (req, res) => {
+  Room.deleteOne({ _id: req.params._id })
+    .then((deleted) => {
+      req.flash("success_msg", "Room Deleted !");
+      res.redirect(`/hb/dashboard`);
+    })
+    .catch((err) => {
+      res.render("helpers/error", { msg: "Could not delete room. Try again" });
+      console.log(err);
+    });
+});
 
 module.exports = router;

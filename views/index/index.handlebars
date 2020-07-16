@@ -1,41 +1,28 @@
-<!-- showcase -->
-<header id="showcase">
-    <nav class="navbar border-bottom">
-        <div class="container">
-            <a class="lead text-center">Hostel Booker</a>
-            <ul class="my-2">
-                <li><a href="/" class="">Home</a></li>
-                <li><a href="/hb/register" class="">
-                        <i class="fas fa-user hide-sm"></i>
-                        <span>Register</span>
-                    </a></li>
-                <li><a href="/hb/login">
-                        <i class="fas fa-user hide-sm"></i>
-                        <span>Login</span>
-                    </a></li>
-            </ul>
-        </div>
-    </nav>
-    <div class="container">
-        <div class="showcase-container">
-            <div class="showcase-content text-center">
-                <h1>Hello</h1>
-                <p>Lorem, ipsum dolor.</p>
+{{> _navbar}}
+<section id="showcase">
+    <div class="container text-center">
+        <div class="home-search p-5">
+            <div class="overlay p-5">
+                <h1 class="display-4 mb-4">
+                    Hostel Booking Just Got So Easy
+                </h1>
+                <p class="lead"> <i class="text-danger fas fa-map-marker fa-2x"></i> Book a room at the click of a
+                    button.</p>
+
             </div>
         </div>
     </div>
-</header>
-<!-- Locations -->
+</section>
+
 
 <section id="locations" style="min-height: 50vh;">
     <div class="container">
         {{> _alerts}}
         <p class="large">
-
-        <h3>Select Location</h3>
+        <h2 class="text-grey">Where would you like to be ?</h2>
         </p>
-        <div class="grid-2 ">
-            <ul class="">
+        <div class="grid-2-custom">
+            <ul class="my-2">
                 <li class="">
                     <i class="fas fa-map-marker"></i>
                     <a href="/hb/locality-hostels/ayeduase" class="lead">Ayeduase</a>
@@ -66,8 +53,8 @@
                 </li>
             </ul>
             <div class="image">
-                <img src="/assets/img/showcase.jpg" class="hide-sm" alt="">
-                <p class="text-center text-danger">* Hotels available in KNUST for now *</p>
+                <img src="/assets/img/undraw_select_house_qbag.png" class="" alt="">
+                <p class="text-center text-danger info-text">* Hotels available in KNUST for now *</p>
             </div>
         </div>
     </div>

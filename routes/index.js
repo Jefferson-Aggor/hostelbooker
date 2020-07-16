@@ -84,8 +84,8 @@ router.post(
     const { name, email, phone, location, description, password } = req.body;
     let errors = [];
 
-    if (password.length < 5) {
-      errors.push({ msg: "Password should be more than 5 chars" });
+    if (password.length <= 6) {
+      errors.push({ msg: "Password should be more than 6 chars" });
     }
     if (errors.length > 0) {
       res.render("index/register", { errors });
@@ -93,11 +93,9 @@ router.post(
 
     Hostel.findOne({ name }).then((hostel) => {
       let errors = [];
-
       if (hostel) {
         errors.push({ msg: "Hostel already exists" });
         res.render("index/register", { errors });
-        res.send("hostel already exists");
       } else {
         const newHostel = {
           name,
@@ -136,7 +134,11 @@ router.post(
                           res.redirect("/hb/login");
                         })
                         .catch((err) => {
-                          res.send("error: couldnt save");
+                          req.flash(
+                            "error_msg",
+                            "Hostel was not added. Check inputs"
+                          );
+                          res.redirect("/hb/register");
                         });
                     }
                   });
@@ -273,9 +275,4 @@ router.get("/logout", function (req, res) {
   res.redirect("/hb/login");
 });
 
-router.get("/hb/all", (req, res) => {
-  Hostel.find({}).then((hostels) => {
-    res.send(hostels);
-  });
-});
 module.exports = router;

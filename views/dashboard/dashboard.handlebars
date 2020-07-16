@@ -52,7 +52,7 @@
                     <th scope="col">Room Type</th>
                     <th scope="col">Price</th>
                     <th scope="col">Main Image</th>
-                    <th scope="col">Date</th>
+                    <th scope="col">Listing Date</th>
                     <th scope="col" class="text-center">Changes</th>
                 </tr>
             </thead>
@@ -60,16 +60,19 @@
             {{#each room}}
             <tbody>
                 <tr>
-                    <th scope="row">{{room}}</th>
+                    <th scope="row"><a href="/hb/view-room/{{_id}}">{{room}}</a> </th>
                     <td>ghs <strong>{{price}}</strong></td>
-                    <td><a href="image">main image</a></td>
+                    <td><a href="{{mainRoomImage}}" data-lightbox="{{_id}}">View Image</a></td>
                     <td>{{formatDate date}}</td>
                     <td class="text-center">
-                        <span><a href="/hb/dashboard/edit/{{_id}}">Edit</a></span> |
-                        <span><a href="">Delete</a></span>
+                        <span><a href="/hb/dashboard/edit/{{_id}}"><i class="fas fa-pencil"></i></a></span> |
+                        <span><i class="fas fa-trash text-danger" data-toggle="modal" data-target="#exampleModal">
+
+                            </i></span>
                     </td>
                 </tr>
             </tbody>
+            {{> _deleteModal}}
             {{/each}}
 
         </table>
@@ -166,22 +169,6 @@
                     <label for="main-room-image">Main Image</label>
                     <input type="file" name="image" id="main-image" required />
                 </div>
-
-                <!-- sub images -->
-
-                {{!-- <div>
-                        <label for="photo-1">Photo 1</label>
-                        <input type="file" name="image" id="photo-1" />
-                    </div>
-                    <div>
-                        <label for="photo-1">Photo 2</label>
-                        <input type="file" name="image" id="photo-2" />
-                    </div>
-                    <div>
-                        <label for="photo-1">Photo 3</label>
-                        <input type="file" name="image" id="photo-3" />
-                    </div> --}}
-
                 <button class=" my-2 btn btn-success" id="view-preview">
                     View Preview
                 </button>

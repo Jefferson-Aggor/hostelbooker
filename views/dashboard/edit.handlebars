@@ -1,0 +1,113 @@
+{{> _navbar}}
+
+<section id="showcase-inner" class="py-5 text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-12">
+                <h1 class="display-4"> <i class="fas fa-map-marker text-dark"></i> Edit Your Room</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    {{> _alerts}}
+    <div class="grid-2">
+        <div id="add-rooms" class="my-5">
+            <form action="/hb/dashboard/edit/{{room._id}}?_method=PUT" method="post" enctype="multipart/form-data">
+                <select name="room" id="room-type">
+                    <option value="{{room.room}}" selected>{{room.room}}</option>
+                    <option value="" disabled>Select Room Type</option>
+                    <option value="One in a room">One in a room</option>
+                    <option value="Two in a room">Two in a room</option>
+                    <option value="Three in a room">Three in a room</option>
+                    <option value="Four in a room">Four in a room</option>
+                </select>
+
+                <input type="text" name="price" placeholder="Price" id="price" class="my-1" value="{{room.price}}" />
+
+                <!-- description -->
+                <textarea class="my-3" name="description" id="description" cols="30" rows="5"
+                    placeholder="Description">{{room.description}}</textarea>
+
+                <!-- accessories -->
+                <div class="my">
+                    <strong>Accessories</strong>
+                    <div class="divider"></div>
+                </div>
+                <div class="grid-2 mb-3">
+                    <!-- Bathroom -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="insideBathroom" name="bathroom"
+                            {{#if room.bathroom}} checked {{/if}} />
+                        <label class="form-check-label" for="insideBathroom">
+                            Inside Bathroom
+                        </label>
+                    </div>
+
+                    <!-- Kitchen -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="kitchen" name="kitchen" {{#if room.kitchen}}
+                            checked {{/if}} />
+                        <label class="form-check-label" for="kitchen">
+                            Kitchen
+                        </label>
+                    </div>
+
+                    <!-- Air condition -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="ac" name="ac" {{#if room.ac}} checked
+                            {{/if}} />
+                        <label class="form-check-label" for="ac">
+                            Air condition
+                        </label>
+                    </div>
+
+                    <!-- Porch -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="porch" name="porch"
+                            {{#if room.porch}}checked {{/if}} />
+                        <label class="form-check-label" for="porch">
+                            Porch
+                        </label>
+                    </div>
+                    <!-- Wardrobe -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="wardrobe" name='wardrobe'
+                            {{#if room.wardrobe}} checked {{/if}} />
+                        <label class="form-check-label" for="wardrobe">
+                            Wardrobe
+                        </label>
+                    </div>
+
+                    <!-- Mono beds -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="mono-beds" name="monoBeds"
+                            {{#if room.monoBeds}} checked {{/if}} />
+                        <label class="form-check-label" for="mono-beds">
+                            Mono beds
+                        </label>
+                    </div>
+                </div>
+
+                <!-- images -->
+                <div class="my">
+                    <strong>Images</strong>
+                    <div class="divider"></div>
+                </div>
+                <!-- main image -->
+                <div>
+                    <label for="main-room-image">Main Image</label>
+                    <input type="file" name="image" id="main-image" required />
+                    {{#if room.mainRoomImage}}
+                    <a href="{{room.mainRoomImage}}" target="_blank" rel="noopener noreferrer">View Image</a>
+                    {{else}}
+                    <p class="text-danger">** No Room Image,select one from above</p>
+                    {{/if}}
+                </div>
+                <input type="submit" value="Update Room" class="btn btn-dark btn-block" />
+            </form>
+        </div>
+
+    </div>
+</div>

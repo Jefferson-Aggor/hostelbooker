@@ -9,6 +9,7 @@ const {
 } = require("@handlebars/allow-prototype-access");
 const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
+const methodOverride = require("method-override");
 const path = require("path");
 
 const app = express();
@@ -49,6 +50,9 @@ app.use(
 );
 
 app.use(flash());
+
+// method override
+app.use(methodOverride("_method"));
 
 // locals
 app.use((req, res, next) => {

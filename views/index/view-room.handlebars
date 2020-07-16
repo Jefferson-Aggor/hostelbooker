@@ -29,7 +29,7 @@
                                 <span class="float-right">ghs {{room.price}}</span>
                             </li>
                             {{!-- mono beds --}}
-                            {{#if room.monoBeds}}
+                            {{#if room.mono_beds}}
                             <li class="list-group-item text-secondary">
                                 <i class="fas fa-bed"></i> Mono Beds:
                                 <span class="float-right"><i class="fas fa-check"></i></span>
@@ -58,13 +58,13 @@
                             {{#if room.kitchen}}
                             <li class="list-group-item text-secondary">
                                 <i class="fa fa-cutlery"></i> Kitchen:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i>
+                                <span class="float-right"><i class="fas fa-check "></i>
                                 </span>
                             </li>
                             {{else}}
                             <li class="list-group-item text-secondary">
                                 <i class="fa fa-cutlery"></i> Kitchen:
-                                <span class="float-right"><i class="fas fa-check "></i>
+                                <span class="float-right"><i class="fas fa-window-close text-danger "></i>
                                 </span>
                             </li>
                             {{/if}}
@@ -75,29 +75,41 @@
                             {{#if room.ac}}
                             <li class="list-group-item text-secondary">
                                 <i class="fas fa-th-large"></i> Air Condition:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
+                                <span class="float-right"><i class="fas fa-check"></i></span>
                             </li>
                             {{else}}
                             <li class="list-group-item text-secondary">
                                 <i class="fas fa-th-large"></i> Air Condition:
-                                <span class="float-right"><i class="fas fa-check"></i></span>
+                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
                             </li>
                             {{/if}}
 
                             {{#if room.porch}}
                             <li class="list-group-item text-secondary">
                                 <i class="fas fa-square"></i> Porch:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i>
+                                <span class="float-right"><i class="fas fa-check "></i>
                                 </span>
                             </li>
                             {{else}}
                             <li class="list-group-item text-secondary">
                                 <i class="fas fa-th-large"></i> Porch:
-                                <span class="float-right"><i class="fas fa-check"></i></span>
+                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
                             </li>
                             {{/if}}
 
+                            {{#if room.wardrobe}}
+                            <li class="list-group-item text-secondary">
+                                <i class="fas fa-square"></i> wardrobe
+                                <span class="float-right"><i class="fas fa-check "></i>
+                                </span>
+                            </li>
+                            {{else}}
+                            <li class="list-group-item text-secondary">
+                                <i class="fas fa-th-large"></i> Wardrobe:
+                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
+                            </li>
 
+                            {{/if}}
 
                         </ul>
                     </div>

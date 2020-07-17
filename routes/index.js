@@ -178,7 +178,7 @@ router.post("/hb/book-room/:_id", (req, res) => {
     hostel: hostel_id,
   };
 
-  Book.findOne({ name, room: room_id }).then((booked) => {
+  Book.findOne({ name, room: room_id, email }).then((booked) => {
     if (!booked) {
       new Book(newBooking)
         .save()

@@ -6,7 +6,7 @@
                 <i class="fas fa-phone"></i> (055)-930-5117
             </div>
             <div class="col-md-4">
-                <i class="fas fa-envelope-open"></i> asktheporter@gmail.com
+                <i class="fas fa-envelope-open"></i> asktheporter.co@gmail.com
             </div>
             <div class="col-md-4">
                 <div class="social text-right">
@@ -42,11 +42,11 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 
-            {{#if user._id}}
+            {{#if loggedUser}}
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item mr-3">
                     <a class="nav-link" href="#">
-                        <i class="fas fa-cog"></i> Dashboard, {{user.name}}</a>
+                        <i class="fas fa-cog"></i> Dashboard, {{loggedUser.name}}</a>
                 </li>
                 <li class="nav-item mr-3">
                     <a class="nav-link" href="/logout">

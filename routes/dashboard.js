@@ -25,7 +25,7 @@ router.get("/", requireLogin, (req, res) => {
         .limit(3)
         .sort({ _id: -1 })
         .then((book) => {
-          res.render("dashboard/dashboard", { user: req.user, room, book });
+          res.render("dashboard/dashboard", { loggedUser: req.user, room, book });
         });
     })
     .catch((err) =>

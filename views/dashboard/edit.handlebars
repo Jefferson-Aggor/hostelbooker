@@ -1,5 +1,3 @@
-{{> _navbar}}
-
 <section id="showcase-inner" class="py-5 text-white">
     <div class="container">
         <div class="row text-center">
@@ -98,9 +96,9 @@
                 <!-- main image -->
                 <div>
                     <label for="main-room-image">Main Image</label>
-                    <input type="file" name="image" id="main-image" required />
+                    <input type="file" name="image" id="main-image" />
                     {{#if room.mainRoomImage}}
-                    <a href="{{room.mainRoomImage}}" target="_blank" rel="noopener noreferrer">View Image</a>
+                    <a href="{{room.mainRoomImage}}" data-lightbox={{room._id}} rel="noopener noreferrer">View Image</a>
                     {{else}}
                     <p class="text-danger">** No Room Image,select one from above</p>
                     {{/if}}

@@ -6,8 +6,10 @@ const router = express.Router();
 // require models
 require("../models/room");
 require("../models/book");
+
 const Room = mongoose.model("room");
 const Book = mongoose.model("book");
+
 // require files
 const validateCheckbox = require("../helpers/checkboxValidation");
 const { multerDestination } = require("../helpers/helpers");
@@ -29,6 +31,7 @@ router.get("/", requireLogin, (req, res) => {
             loggedUser: req.user,
             room,
             book,
+            path: req.originalUrl,
           });
         });
     })
@@ -39,12 +42,26 @@ router.get("/", requireLogin, (req, res) => {
     );
 });
 
+// get all bookings
+router.get("/all-bookings/:_id", requireLogin, (req, res) => {
+  Book.find({ hostel: req.params._id })
+    .sort({ _id: -1 })
+    .then((book) => {
+      res.render("dashboard/all-bookings", { book, loggedUser: req.user });
+    })
+    .catch((err) => {
+      res.render("helpers/errors", {
+        msg: "Could not load all bookings. Try again",
+      });
+    });
+});
+
 // get room edit route;
 router.get("/edit/:_id", requireLogin, (req, res) => {
   Room.findOne({ _id: req.params._id })
     .populate("hostel")
     .then((room) => {
-      res.render("dashboard/edit", { room });
+      res.render("dashboard/edit", { room, path: req.path });
     })
     .catch((err) => {
       res.render("helpers/errors", {
@@ -74,7 +91,8 @@ router.post(
     // set image to cloudinary
     cloudinary.uploader.upload(req.file.path, eagerOptions, (err, result) => {
       if (err) {
-        console.log(err);
+        req.flash("error_msg", "Failed to upload photo. Try again");
+        res.redirect("/hb/dashboard");
       } else {
         const newRoom = {
           room,
@@ -82,7 +100,7 @@ router.post(
           description,
           porch: validateCheckbox(porch, "on"),
           wardrobe: validateCheckbox(wardrobe, "on"),
-          monoBeds: validateCheckbox(monoBeds, "on"),
+          mono_beds: validateCheckbox(monoBeds, "on"),
           bathroomInside: validateCheckbox(bathroom, "on"),
           ac: validateCheckbox(ac, "on"),
           kitchen: validateCheckbox(kitchen, "on"),
@@ -126,7 +144,7 @@ router.put(
                 (room.porch = validateCheckbox(req.body.porch, "on")),
                 (room.wardrobe = validateCheckbox(req.body.wardrobe, "on")),
                 (room.ac = validateCheckbox(req.body.ac, "on")),
-                (room.monoBeds = validateCheckbox(req.body.monoBeds, "on")),
+                (room.mono_beds = validateCheckbox(req.body.monoBeds, "on")),
                 (room.bathroomInside = validateCheckbox(
                   req.body.bathroom,
                   "on"
@@ -141,7 +159,7 @@ router.put(
                     "success_msg",
                     "Room has been updated. Back to dashboard"
                   );
-                  res.redirect(`/hb/dashboard/edit/${req.params._id}`);
+                  res.redirect(`/hb/dashboard/`);
                 })
                 .catch((err) => {
                   req.flash("error_msg", "Something bad happened. Try again");
@@ -157,7 +175,7 @@ router.put(
           (room.porch = validateCheckbox(req.body.porch, "on")),
           (room.wardrobe = validateCheckbox(req.body.wardrobe, "on")),
           (room.ac = validateCheckbox(req.body.ac, "on")),
-          (room.monoBeds = validateCheckbox(req.body.monoBeds, "on")),
+          (room.mono_beds = validateCheckbox(req.body.monoBeds, "on")),
           (room.bathroomInside = validateCheckbox(req.body.bathroom, "on")),
           (room.kitchen = validateCheckbox(req.body.kitchen, "on")),
           room
@@ -167,7 +185,7 @@ router.put(
                 "success_msg",
                 "Room has been updated. Back to dashboard"
               );
-              res.redirect(`/hb/dashboard/edit/${req.params._id}`);
+              res.redirect(`/hb/dashboard/`);
             })
             .catch((err) => {
               req.flash("error_msg", "Something bad happened. Try again");
@@ -187,7 +205,8 @@ router.delete("/delete/:_id", (req, res) => {
     })
     .catch((err) => {
       res.render("helpers/error", { msg: "Could not delete room. Try again" });
-      console.log(err);
+      req.flash("error_msg", "Something bad happened. Try again");
+      res.redirect("/hb/dashboard");
     });
 });
 

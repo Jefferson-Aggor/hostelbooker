@@ -22,15 +22,15 @@ const { cloudinaryConfig } = require("../config/cloudinary");
 cloudinaryConfig;
 
 router.get("/", (req, res) => {
-  res.render("index/index");
+  res.render("index/index", { path: req.path });
 });
 
 router.get("/hb/register", (req, res) => {
-  res.render("index/register");
+  res.render("index/register", { path: req.path });
 });
 
 router.get("/hb/login", (req, res) => {
-  res.render("index/login");
+  res.render("index/login", { path: req.path });
 });
 
 // view hostels in a particular locality
@@ -40,6 +40,7 @@ router.get("/hb/locality-hostels/:location", (req, res) => {
       res.render("index/locality-hostels", {
         hostel,
         location: req.params.location,
+        path: req.path,
       });
     })
     .catch((err) => {
@@ -54,7 +55,11 @@ router.get("/hb/view-hostel/:_id", (req, res) => {
     .then((room) => {
       if (room) {
         let user = room.filter((x) => x.hostel.name)[0];
-        res.render("index/view-hostel", { room, user: user.hostel });
+        res.render("index/view-hostel", {
+          room,
+          user: user.hostel,
+          path: req.path,
+        });
       } else {
         res.render("helpers/errors", { msg: "No Room Registered Yet." });
       }
@@ -68,7 +73,7 @@ router.get("/hb/view-room/:_id", (req, res) => {
   Room.findOne({ _id: req.params._id })
     .populate("hostel")
     .then((room) => {
-      res.render("index/view-room", { room });
+      res.render("index/view-room", { room, path: req.path });
     })
     .catch((err) =>
       res.render("helpers/errors", { msg: "Error viewing room. Try again" })
@@ -111,16 +116,22 @@ router.post(
           eagerOptions,
           (err, result) => {
             if (err) {
-              console.log(err);
+              req.flash("error_msg", "Failed to upload photo. Try again");
+              res.redirect("/hb/register");
             } else {
               // hash password
               bcrypt.genSalt(10, (err, salt) => {
                 if (err) {
-                  console.log(err);
+                  req.flash("error_msg", "Something bad happened. Try again");
+                  res.redirect("/hb/register");
                 } else {
                   bcrypt.hash(newHostel.password, salt, (err, hash) => {
                     if (err) {
-                      console.log(err);
+                      req.flash(
+                        "error_msg",
+                        "Something bad happened. Try again"
+                      );
+                      res.redirect("/hb/register");
                     } else {
                       newHostel.password = hash;
                       newHostel.mainImage = result.eager[0].secure_url;
@@ -177,30 +188,31 @@ router.post("/hb/book-room/:_id", (req, res) => {
     room: room_id,
     hostel: hostel_id,
   };
-
-  Book.findOne({ name, room: room_id, email }).then((booked) => {
+  Book.findOne({ name, email, hostel: hostel_id }).then((booked) => {
     if (!booked) {
       new Book(newBooking)
         .save()
         .then((book) => {
           const output = `
-              <p class='text-success'>Hostel Has been booked</p>
+              <p class='text-success'>Room Has been booked</p>
               <p>Your request to book a room has been made.</p>
-              <p>Hostel : ${hostel_name}</p>
-              <p>Room Type Selected :${book.roomType}</p>
-              <p>Price :ghs</p> <h3>${price}</h3>
-              <p>You Booked a room with ${hostel_name} on ${book.date}. </p>
+              <p>Hostel: <strong>${hostel_name}</p></strong></p>
+              <p>Room Type Selected : <strong>${book.roomType}</strong></p>
+              <p>Price :ghs <span><strong>${price}<strong></span></p>
+              <p>You Booked a room with <strong>${hostel_name}</strong> on ${book.date}. </p>
               <p>${hostel_name}'s management will get back to you soon. Thank You</p>
               `;
           let bookOutput = `
             <p class='text-success'>Booking has been made</p>
             <h3>DETAILS</h3>
-            <p>Booked By: ${name}</p>
-            <p>Room Type : ${roomType} </p>
-            <p>Email : ${email} </p>
-            <p>Phone : ${contact} </p>
-            <p>Sex : ${sex} </p>
-            <p>Expectations : ${expectations} </p>
+            <p>Booked By: <strong>${name}</p></strong>
+            <p>Room Type : <strong>${roomType} </p></strong>
+            <p>Email : <strong>${email} </p></strong>
+            <p>Phone : <strong>${contact} </p><strong>
+            <p>Sex : <strong>${sex} </p><strong>
+            <p>Expectations : <strong>${expectations} </p><strong>
+            <hr>
+            Go to your dashboard for more info <a href=${"/hb/login"}>Go to dashboard</a>
             `;
           let transporter = nodemailer.createTransport({
             service: "gmail",
@@ -214,14 +226,14 @@ router.post("/hb/book-room/:_id", (req, res) => {
           });
 
           let mailOptions = {
-            from: process.env.NODEMAILER_EMAIL,
+            from: "asktheporter.co ",
             to: `<${book.email}>`,
             subject: "Hostel Has Been Booked",
             html: output,
           };
 
           let mailToHostel = {
-            from: process.env.NODEMAILER_EMAIL,
+            from: "asktheporter.co",
             to: `<${hostel_email}>`,
             subject: "Booking Has Been Made",
             html: bookOutput,
@@ -250,13 +262,11 @@ router.post("/hb/book-room/:_id", (req, res) => {
         })
         .catch((err) => {
           req.flash("error_msg", "Something bad happened,try again");
-          console.log(err.message);
           res.redirect(`/hb/view-room/${req.params._id}`);
         });
     } else {
-      req.flash("error_msg", "You've booked room already");
+      req.flash("error_msg", "You've booked a room in this hostel already");
       res.redirect(`/hb/view-room/${req.params._id}`);
-      console.log("booked already");
     }
   });
 });

@@ -1,80 +1,90 @@
-{{!-- <div class="container">
-    <div class="grid-3">
-        {{#each hostel}}
-        <div class="card mb-3 shadow-sm">
-            <img src="/img/bg2.jpg" class="card-img-top" alt="..." />
-            <div class="card-body">
-                <h5 class="card-title lead">{{name}}</h5>
-                <p class="card-text">
-                    <a href="/hb/view-hostel/{{_id}}" class="btn btn-dark btn-block">View Hostel</a>
-                </p>
-            </div>
-        </div>
-        {{/each}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>asktheporter | {{location}}</title>
+</head>
+<body>
 
-    </div>
-</div> --}}
-
-
-
-<section id="showcase-inner" class="py-5 text-white">
-    <div class="container">
-        <div class="row text-center">
-            <div class="col-md-12">
-                <h1 class="display-4 text-capitalize">View Hostels In {{location}}</h1>
-            </div>
-        </div>
-    </div>
-</section>
-<section id="listings" class="py-4">
-    <div class="container">
-        <div class="row">
-            <!-- Listing 1 -->
-            {{#if hostel}}
-            {{#each hostel}}
-            {{#if mainImage}}
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card listing-preview">
-                    <img class="card-img-top" src="{{mainImage}}" alt="">
-                    <div class="card-body">
-                        <div class="listing-heading text-center">
-
-                            <h5>
-                                <i class="fas fa-map-marker text-secondary"></i> {{name}}</h5>
-                        </div>
-
-                        <hr>
-                        <a href="/hb/view-hostel/{{_id}}" class="btn btn-primary btn-block">View Hostel</a>
-                    </div>
+    <section id="showcase-inner" class="py-5 text-white">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <h1 class="display-4 text-capitalize">View Hostels In {{location}}</h1>
                 </div>
             </div>
-            {{else}}
-            <div class="col-md-6 col-lg-4 mb-4">
-                <div class="card listing-preview">
-                    <img class="card-img-top" src="/assets/img/homes/home-1.jpg" alt="">
-                    {{!-- <div class="card-img-overlay">
-                                        <h2>
-                                            <span class="badge badge-primary text-white p">ghs 490,000</span>
-                                        </h2>
-                                    </div> --}}
-                    <div class="card-body">
-                        <div class="listing-heading text-center">
-
-                            <h5>
-                                <i class="fas fa-map-marker text-secondary"></i> {{name}}</h5>
+        </div>
+    </section>
+    
+    <!-- Breadcrumb -->
+    <section id="bc" class="mt-3">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="/">
+                            <i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="breadcrumb-item active"> view hostels in {{location}}</li>
+                </ol>
+            </nav>
+        </div>
+    </section>
+    
+    <section id="listings" class="py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Listing 1 -->
+                {{#if hostel}}
+                {{#each hostel}}
+                {{#if mainImage}}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card listing-preview">
+                        <img class="card-img-top" src="{{mainImage}}" alt="">
+                        <div class="card-body">
+                            <div class="listing-heading text-center">
+    
+                                <h5>
+                                    <i class="fas fa-map-marker text-secondary"></i> {{name}}</h5>
+                            </div>
+    
+                            <hr>
+                            <a href="/hb/view-hostel/{{_id}}" class="btn btn-primary btn-block">View Hostel</a>
                         </div>
-
-                        <hr>
-                        <a href="/hb/view-hostel/{{_id}}" class="btn btn-primary btn-block">View Hostel</a>
                     </div>
                 </div>
+                {{else}}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card listing-preview">
+                        <img class="card-img-top" src="/assets/img/homes/home-1.jpg" alt="">
+                        {{!-- <div class="card-img-overlay">
+                                            <h2>
+                                                <span class="badge badge-primary text-white p">ghs 490,000</span>
+                                            </h2>
+                                        </div> --}}
+                        <div class="card-body">
+                            <div class="listing-heading text-center">
+    
+                                <h5>
+                                    <i class="fas fa-map-marker text-secondary"></i> {{name}}</h5>
+                            </div>
+    
+                            <hr>
+                            <a href="/hb/view-hostel/{{_id}}" class="btn btn-primary btn-block">View Hostel</a>
+                        </div>
+                    </div>
+                </div>
+                {{/if}}
+    
+                {{/each}}
+                {{else}}
+                <h4 class="text-center">No hostels in this area yet</h4>
+                {{/if}}
             </div>
-            {{/if}}
-
-            {{/each}}
-            {{else}}
-            <h4 class="text-center">No hostels in this area yet</h4>
-            {{/if}}
         </div>
-    </div>
-</section>
+    </section>
+    
+</body>
+</html>
+

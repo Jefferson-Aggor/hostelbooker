@@ -21,7 +21,7 @@ const index = require("./routes/index");
 const dashboard = require("./routes/dashboard");
 
 // handlebar helpers
-const { formatDate } = require("./hbs/helper");
+const { formatDate,pathLocation,container } = require("./hbs/helper");
 
 // Make static dir
 app.use(express.static(path.join(__dirname, "Public")));
@@ -35,7 +35,7 @@ app.engine(
   "handlebars",
   exphbs({
     handlebars: allowInsecurePrototypeAccess(Handlebars),
-    helpers: { formatDate },
+    helpers: { formatDate,pathLocation,container }
   })
 );
 app.set("view engine", "handlebars");

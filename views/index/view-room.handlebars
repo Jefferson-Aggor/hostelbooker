@@ -1,151 +1,191 @@
-<section id="listing" class="py-4">
+<!DOCTYPE html>
+<html lang="en">
 
-    <div class="container">
-        {{> _alerts}}
-        <a href="/hb/view-hostel/{{room.hostel._id}}" class="btn btn-light mb-4">Back To Rooms</a>
-        <div class="row">
-            <div class="col-md-9">
-                <!-- Home Main Image -->
-                {{#if room.mainRoomImage}}
-                <a href="{{room.mainRoomImage}}" data-lightbox="home-images">
-                    <img src="{{room.mainRoomImage}}" alt="" class="img-fluid mb-3">
-                </a>
-                {{else}}
-                <a href="/assets/img/homes/home-1.jpg" data-lightbox="home-images">
-                    <img src="/assets/img/homes/home-1.jpg" alt="" class="img-fluid mb-3">
-                </a>
-                {{/if}}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>asktheporter | {{room.hostel.name}}-{{room.room}}</title>
+</head>
 
+<body>
 
+    <section id="listing" class="py-4">
 
-                <!-- Fields -->
-                <div class="row mb-5 fields">
-                    <div class="col-md-6">
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-money-bill-alt"></i> Price:
-                                <span class="float-right">ghs {{room.price}}</span>
-                            </li>
-                            {{!-- mono beds --}}
-                            {{#if room.mono_beds}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-bed"></i> Mono Beds:
-                                <span class="float-right"><i class="fas fa-check"></i></span>
-                            </li>
-                            {{else}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-bed"></i> Mono Beds:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
-
-                            </li>
-                            {{/if}}
-
-                            {{!-- bathroom --}}
-                            {{#if room.bathroomInside}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-bath"></i> Bathroom Inside:
-                                <span class="float-right"><i class="fas fa-check"></i></span>
-                            </li>
-                            {{else}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-bath"></i> Bathrooms:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
-                            </li>
-                            {{/if}}
-
-                            {{#if room.kitchen}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fa fa-cutlery"></i> Kitchen:
-                                <span class="float-right"><i class="fas fa-check "></i>
-                                </span>
-                            </li>
-                            {{else}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fa fa-cutlery"></i> Kitchen:
-                                <span class="float-right"><i class="fas fa-window-close text-danger "></i>
-                                </span>
-                            </li>
-                            {{/if}}
-                        </ul>
-                    </div>
-                    <div class="col-md-6">
-                        <ul class="list-group list-group-flush">
-                            {{#if room.ac}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-th-large"></i> Air Condition:
-                                <span class="float-right"><i class="fas fa-check"></i></span>
-                            </li>
-                            {{else}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-th-large"></i> Air Condition:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
-                            </li>
-                            {{/if}}
-
-                            {{#if room.porch}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-square"></i> Porch:
-                                <span class="float-right"><i class="fas fa-check "></i>
-                                </span>
-                            </li>
-                            {{else}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-th-large"></i> Porch:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
-                            </li>
-                            {{/if}}
-
-                            {{#if room.wardrobe}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-square"></i> wardrobe
-                                <span class="float-right"><i class="fas fa-check "></i>
-                                </span>
-                            </li>
-                            {{else}}
-                            <li class="list-group-item text-secondary">
-                                <i class="fas fa-th-large"></i> Wardrobe:
-                                <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
-                            </li>
-
-                            {{/if}}
-
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Description -->
-                <div class="row mx-2 mb-5">
-                    <h5>Description</h5>
-                    <hr>
-                    <div class="col-md-12">
-                        {{room.description}}
-                    </div>
-                </div>
+        <!-- Breadcrumb -->
+        <section id="bc" class="mt-3">
+            <div class="container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/">
+                                <i class="fas fa-home"></i> Home</a>
+                        </li>
+                        <li class="breadcrumb-item text-capitalize">
+                            <a href="/hb/locality-hostels/{{room.hostel.location}}">
+                                <i class="fas fa-home"></i> {{room.hostel.location}}</a>
+                        </li>
+                        <li class="breadcrumb-item text-capitalize">
+                            <a href="/hb/view-hostel/{{room.hostel.id}}">
+                                <i class="fas fa-home"></i> {{room.hostel.name}}</a>
+                        </li>
+                        <li class="breadcrumb-item active"> Room</li>
+                    </ol>
+                </nav>
             </div>
-            <div class="col-md-3">
-                <div class=" mb-3 ">
-                    {{#if room.hostel.mainImage}}
-                    <img class="card-img-top side-image" src="{{room.hostel.mainImage}}" alt="Seller of the month">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-map-marker"></i> {{room.hostel.name}}
-                        </h5>
+        </section>
 
-                    </div>
+        <div class="container">
+            {{> _alerts}}
+            <div class="row">
+                <div class="col-md-9">
+                    <!-- Home Main Image -->
+                    {{#if room.mainRoomImage}}
+                    <a href="{{room.mainRoomImage}}" data-lightbox="home-images">
+                        <img src="{{room.mainRoomImage}}" alt="" class="img-fluid mb-3">
+                    </a>
                     {{else}}
-                    <img class="card-img-top side-image" src="/assets/img/realtors/jenny.jpg" alt="Seller of the month">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            <i class="fas fa-map-marker"></i> {{room.hostel.name}}
-                        </h5>
-
-                    </div>
+                    <a href="/assets/img/homes/home-1.jpg" data-lightbox="home-images">
+                        <img src="/assets/img/homes/home-1.jpg" alt="" class="img-fluid mb-3">
+                    </a>
                     {{/if}}
+
+
+
+                    <!-- Fields -->
+                    <div class="row mb-5 fields">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-money-bill-alt"></i> Price:
+                                    <span class="float-right">ghs <strong>{{room.price}}</strong></span>
+                                </li>
+                                {{!-- mono beds --}}
+                                {{#if room.mono_beds}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-bed"></i> Mono Beds:
+                                    <span class="float-right"><i class="fas fa-check"></i></span>
+                                </li>
+                                {{else}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-bed"></i> Mono Beds:
+                                    <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
+
+                                </li>
+                                {{/if}}
+
+                                {{!-- bathroom --}}
+                                {{#if room.bathroomInside}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-bath"></i> Bathroom Inside:
+                                    <span class="float-right"><i class="fas fa-check"></i></span>
+                                </li>
+                                {{else}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-bath"></i> Bathrooms:
+                                    <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
+                                </li>
+                                {{/if}}
+
+                                {{#if room.kitchen}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fa fa-cutlery"></i> Kitchen:
+                                    <span class="float-right"><i class="fas fa-check "></i>
+                                    </span>
+                                </li>
+                                {{else}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fa fa-cutlery"></i> Kitchen:
+                                    <span class="float-right"><i class="fas fa-window-close text-danger "></i>
+                                    </span>
+                                </li>
+                                {{/if}}
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                {{#if room.ac}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-th-large"></i> Air Condition:
+                                    <span class="float-right"><i class="fas fa-check"></i></span>
+                                </li>
+                                {{else}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-th-large"></i> Air Condition:
+                                    <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
+                                </li>
+                                {{/if}}
+
+                                {{#if room.porch}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-square"></i> Porch:
+                                    <span class="float-right"><i class="fas fa-check "></i>
+                                    </span>
+                                </li>
+                                {{else}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-th-large"></i> Porch:
+                                    <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
+                                </li>
+                                {{/if}}
+
+                                {{#if room.wardrobe}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-square"></i> wardrobe
+                                    <span class="float-right"><i class="fas fa-check "></i>
+                                    </span>
+                                </li>
+                                {{else}}
+                                <li class="list-group-item text-secondary">
+                                    <i class="fas fa-th-large"></i> Wardrobe:
+                                    <span class="float-right"><i class="fas fa-window-close text-danger"></i></span>
+                                </li>
+
+                                {{/if}}
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="row mx-2 mb-5">
+                        <h5>Description</h5>
+                        <div class="divider"></div>
+                        <div class="col-md-12">
+                            {{room.description}}
+                        </div>
+                    </div>
                 </div>
-                <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Book
-                    Room</button>
+                <div class="col-md-3">
+                    <div class=" mb-3 ">
+                        {{#if room.hostel.mainImage}}
+                        <img class="card-img-top side-image" src="{{room.hostel.mainImage}}" alt="Seller of the month">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-map-marker"></i> {{room.hostel.name}}
+                            </h5>
+
+                        </div>
+                        {{else}}
+                        <img class="card-img-top side-image" src="/assets/img/realtors/jenny.jpg"
+                            alt="Seller of the month">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fas fa-map-marker"></i> {{room.hostel.name}}
+                            </h5>
+
+                        </div>
+                        {{/if}}
+                    </div>
+                    <button class="btn-primary btn-block btn-lg" data-toggle="modal" data-target="#inquiryModal">Book
+                        Room</button>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+
+</body>
+
+</html>
+
+
 {{> _modal_trigger}}

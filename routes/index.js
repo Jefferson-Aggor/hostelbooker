@@ -212,7 +212,7 @@ router.post("/hb/book-room/:_id", (req, res) => {
             <p>Sex : <strong>${sex} </p><strong>
             <p>Expectations : <strong>${expectations} </p><strong>
             <hr>
-            Go to your dashboard for more info <a href=${"/hb/login"}>Go to dashboard</a>
+            Go to your dashboard for more info <a href=${"https://asktheporter.herokuapp.com/hb/login"}>Go to dashboard</a>
             `;
           let transporter = nodemailer.createTransport({
             service: "gmail",

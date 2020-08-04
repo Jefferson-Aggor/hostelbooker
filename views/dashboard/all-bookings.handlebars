@@ -21,6 +21,7 @@
                         <th scope="col">Booked By</th>
                         <th scope="col">Email</th>
                         <th scope="col">Tel</th>
+                        <th scope="col">Image</th>
                         <th scope="col">Date</th>
                     </tr>
                 </thead>
@@ -31,6 +32,11 @@
                         <td>{{name}}</td>
                         <td><a href="mailto:{{email}}">{{email}}</a></td>
                         <td><a href="tel:{{contact}}">{{contact}}</a></td>
+                        {{#if passport_img}}
+                        <td><a href="/uploads/{{passport_img}}" data-lightbox="{{passport_img}}">View Image</a></td>
+                        {{else}}
+                        <td>view image</td>
+                        {{/if}}
                         <td class="text-muted">{{formatDate  date}}</td>
                     </tr>
                 </tbody>

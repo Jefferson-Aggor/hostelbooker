@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>asktheporter | Register Account</title>
+
 </head>
+
 <body>
     <div class="container-sm ">
         {{> _alerts}}
@@ -16,52 +19,67 @@
                 </div>
                 <form action="/hb/register" method="post" class="" enctype="multipart/form-data" <div>
                     <input type="text" name="name" id="nameOfHostel" placeholder="Enter name of hostel" required />
+
+                    <!-- email and tel -->
+                    <div class="grid-2">
+                        <input type="email" name="email" id="email" placeholder="Email" required />
+                        <input type="tel" name="phone" id="tel" placeholder="Phone number" required />
+                    </div>
+                    <!-- location -->
+                    <div class="my-2">
+                        <select name="location" id="location" required>
+                            <option value="" selected disabled>Select Location</option>
+                            <div class="divider"></div>
+                            <option value="ayeduase">Ayeduase</option>
+                            <option value="bomso">Bomso</option>
+                            <option value="kentenkrono">Kentenkrono</option>
+                            <option value="kotei">Kotei</option>
+                            <option value="new-site">New site</option>
+                        </select>
+                    </div>
+                    <!-- description -->
+                    <div class="description">
+                        <textarea name="description" id="description" cols="10" rows="5" placeholder="Description"
+                            required></textarea>
+                    </div>
+
+                    <!-- main-image -->
+
+                    <div class="grid-2 my-3">
+                        <div>
+                            <p>Select Image</p>
+                            <input type="file" name="main-image" id="mainImage" />
+                        </div>
+
+                    </div>
+
+                    <div class="terms-and-conditions">
+                        <strong>Code Of Conduct</strong>
+                        <div class="divider"></div>
+                        <textarea name="terms_and_conditions" id="terms-and-conditions" cols="30" rows="10"
+                            required></textarea>
+                    </div>
+
+                    <!-- passwords -->
+                    <div class="password">
+                        <input type="password" name="password" id="password" placeholder="Password" required />
+                        <p class="text-center info-text text-red">
+                            * Password must be greater than 6 characters
+                        </p>
+                    </div>
+                    <button type="submit" class="btn btn-block bg-primary">
+                        Register Hostel
+                    </button>
+                </form>
             </div>
-            <!-- email and tel -->
-            <div class="grid-2">
-                <input type="email" name="email" id="email" placeholder="Email" required />
-                <input type="tel" name="phone" id="tel" placeholder="Phone number" required />
-            </div>
-            <!-- location -->
-            <div class="my-2">
-                <select name="location" id="location" required>
-                    <option value="" selected disabled>Select Location</option>
-                    <div class="divider"></div>
-                    <option value="ayeduase">Ayeduase</option>
-                    <option value="bomso">Bomso</option>
-                    <option value="kentenkrono">Kentenkrono</option>
-                    <option value="kotei">Kotei</option>
-                    <option value="new-site">New site</option>
-                </select>
-            </div>
-            <!-- description -->
-            <div class="description">
-                <textarea name="description" id="description" cols="10" rows="5" placeholder="Description"
-                    required></textarea>
-            </div>
-    
-            <!-- main-image -->
-    
-            <div class="grid-2 my-3">
-                <div>
-                    <p>Select Image</p>
-                    <input type="file" name="main-image" id="mainImage" />
-                </div>
-    
-            </div>
-    
-            <!-- passwords -->
-            <div class="password">
-                <input type="password" name="password" id="password" placeholder="Password" required />
-                <p class="text-center info-text text-red">
-                    * Password must be greater than 6 characters
-                </p>
-            </div>
-            <button type="submit" class="btn btn-block bg-primary">
-                Register Hostel
-            </button>
-            </form>
         </div>
     </div>
+
+
+    <script src="//cdn.ckeditor.com/4.14.1/basic/ckeditor.js"></script>
+    <script>
+        CKEDITOR.replace('terms_and_conditions')
+    </script>
 </body>
+
 </html>

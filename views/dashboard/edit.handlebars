@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>asktheporter | Edit Room</title>
 </head>
+
 <body>
     <section id="showcase-inner" class="py-5 text-white">
         <div class="container">
@@ -15,7 +17,7 @@
             </div>
         </div>
     </section>
-    
+
     <div class="container">
         {{> _alerts}}
         <div class="grid-2">
@@ -29,13 +31,14 @@
                         <option value="Three in a room">Three in a room</option>
                         <option value="Four in a room">Four in a room</option>
                     </select>
-    
-                    <input type="text" name="price" placeholder="Price" id="price" class="my-1" value="{{room.price}}" />
-    
+
+                    <input type="text" name="price" placeholder="Price" id="price" class="my-1"
+                        value="{{room.price}}" />
+
                     <!-- description -->
                     <textarea class="my-3" name="description" id="description" cols="30" rows="5"
                         placeholder="Description">{{room.description}}</textarea>
-    
+
                     <!-- accessories -->
                     <div class="my">
                         <strong>Accessories</strong>
@@ -45,21 +48,21 @@
                         <!-- Bathroom -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="insideBathroom" name="bathroom"
-                                {{#if room.bathroom}} checked {{/if}} />
+                                {{#if room.bathroomInside}} checked {{/if}} />
                             <label class="form-check-label" for="insideBathroom">
                                 Inside Bathroom
                             </label>
                         </div>
-    
+
                         <!-- Kitchen -->
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="kitchen" name="kitchen" {{#if room.kitchen}}
-                                checked {{/if}} />
+                            <input class="form-check-input" type="checkbox" id="kitchen" name="kitchen"
+                                {{#if room.kitchen}} checked {{/if}} />
                             <label class="form-check-label" for="kitchen">
                                 Kitchen
                             </label>
                         </div>
-    
+
                         <!-- Air condition -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="ac" name="ac" {{#if room.ac}} checked
@@ -68,7 +71,7 @@
                                 Air condition
                             </label>
                         </div>
-    
+
                         <!-- Porch -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="porch" name="porch"
@@ -85,17 +88,17 @@
                                 Wardrobe
                             </label>
                         </div>
-    
+
                         <!-- Mono beds -->
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="mono-beds" name="monoBeds"
-                                {{#if room.monoBeds}} checked {{/if}} />
+                                {{#if room.mono_beds}} checked {{/if}} />
                             <label class="form-check-label" for="mono-beds">
                                 Mono beds
                             </label>
                         </div>
                     </div>
-    
+
                     <!-- images -->
                     <div class="my">
                         <strong>Images</strong>
@@ -106,16 +109,55 @@
                         <label for="main-room-image">Main Image</label>
                         <input type="file" name="image" id="main-image" />
                         {{#if room.mainRoomImage}}
-                        <a href="{{room.mainRoomImage}}" data-lightbox={{room._id}} rel="noopener noreferrer">View Image</a>
+                        <a href="/uploads/room-images/{{room.mainRoomImage}} " data-lightbox={{room._id}}>View Image</a>
                         {{else}}
-                        <p class="text-danger">** No Room Image,select one from above</p>
+                        <small class="text-danger">** No Room Image,select one from above</small>
+                        {{/if}}
+                    </div>
+
+                    <div>
+                        <label for="photo-1">Photo-1</label>
+                        <input type="file" name="image" id="photo-1" />
+                        {{#if room.photo_1}}
+                        <a href="/uploads/room-images/{{room.photo_1}}" data-lightbox={{room._id}}>View Image</a>
+                        {{else}}
+                        <small class="text-danger">** No image,select one from above</small>
+                        {{/if}}
+                    </div>
+                    <div>
+                        <label for="photo-2">Photo-2</label>
+                        <input type="file" name="image" id="photo-2" />
+                        {{#if room.photo_2}}
+                        <a href="/uploads/room-images/{{room.photo_2}}" data-lightbox={{room._id}}>View Image</a>
+                        {{else}}
+                        <small class="text-danger">** No image,select one from above</small>
+                        {{/if}}
+                    </div>
+                    <div>
+                        <label for="photo-3">Photo-3</label>
+                        <input type="file" name="image" id="photo-3" />
+                        {{#if room.photo_3}}
+                        <a href="/uploads/room-images/{{room.photo_3}}" data-lightbox={{room._id}}>View Image</a>
+                        {{else}}
+                        <small class="text-danger">** No image,select one from above</small>
+                        {{/if}}
+                    </div>
+                    <div>
+                        <label for="photo-4">Photo-4</label>
+                        <input type="file" name="image" id="photo-4" />
+                        {{#if room.photo_4}}
+                        <a href="/uploads/room-images/{{room.photo_4}}" data-lightbox={{room._id}}>View Image</a>
+                        {{else}}
+                        <small class="text-danger">** No image,select one from above</small>
                         {{/if}}
                     </div>
                     <input type="submit" value="Update Room" class="btn btn-dark btn-block" />
                 </form>
             </div>
-    
+
         </div>
     </div>
+
 </body>
+
 </html>

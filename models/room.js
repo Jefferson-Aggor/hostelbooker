@@ -21,17 +21,19 @@ const roomSchema = new Schema({
   },
   mainRoomImage: {
     type: String,
-    required: true
   },
-  // photo_1: {
-  //   type: String,
-  // },
-  // photo_2: {
-  //   type: String,
-  // },
-  // photo_3: {
-  //   type: String,
-  // },
+  photo_1: {
+    type: String,
+  },
+  photo_2: {
+    type: String,
+  },
+  photo_3: {
+    type: String,
+  },
+  photo_4: {
+    type: String,
+  },
   bathroomInside: { type: Boolean },
   ac: { type: Boolean },
   porch: { type: Boolean },

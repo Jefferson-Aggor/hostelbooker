@@ -42,13 +42,25 @@
                     <span>&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <form action="/hb/book-room/{{room._id}}" method="POST">
+            <div class="modal-body p-2">
+                <form action="/hb/book-room/{{room._id}}" method="POST" enctype="multipart/form-data">
                     <input type="hidden" name='hostel_id' value="{{room.hostel._id}}">
                     <input type="hidden" name='price' value="{{room.price}}">
                     <input type="hidden" name='hostel_name' value="{{room.hostel.name}}">
                     <input type="hidden" name='hostel_email' value="{{room.hostel.email}}">
                     <input type="hidden" name='room_id' value="{{room._id}}">
+
+
+                    <div id="booking-image">
+
+                        <label for="profile_img" id="profile-img-label">
+                            <div class="all-center text-placeholder"><small><strong>Passport img</strong></small>
+                            </div>
+                        </label>
+                    </div>
+
+                    <input type="file" name="profile_img" id="profile_img" required>
+
                     <div class="form-group">
                         <label for="property_name" class="col-form-label">Room:</label>
                         <input type="text" name="roomType" class="form-control" value="{{room.room}}" readonly>
@@ -78,10 +90,65 @@
                         <label for="message" class="col-form-label">Expectation:</label>
                         <textarea name="expectations" class="form-control"></textarea>
                     </div>
+                    <div class="" id="confirmation-box">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="confirm" />
+                            <label class="form-check-label" for="confirm">
+                                <small class="text-muted text-danger">By checking this your are agree to adhere to the
+                                    <a href="#">rules and regulations</a> of this hostel</small>
+                            </label>
+                        </div>
+                    </div>
                     <hr>
-                    <input type="submit" value="Book Room" class="btn btn-block bg-primary">
+                    <input type="submit" id="book_room" value="Book Room" class="btn btn-block bg-primary">
                 </form>
             </div>
+
+
         </div>
     </div>
 </div>
+</div>
+
+
+
+<script>
+
+    const fileInput = document.getElementById('profile_img')
+    const previewImage = document.getElementById('profile-img-label')
+
+    const confirmed = document.getElementById('confirm')
+    const bookRoom = document.getElementById('book_room')
+
+
+    fileInput.addEventListener('change', (e) => {
+        const file = e.target.files[0]
+
+        if (file) {
+            const reader = new FileReader()
+            reader.onload = function (evt) {
+                const { result } = evt.target
+                previewImage.innerHTML = `<img src='${result} ' class="passport_img"> `
+                previewImage.style.border = 'none'
+
+            }
+            reader.readAsDataURL(file)
+        } else {
+            previewImage.innerHTML = '<div class="all-center text-placeholder passport-img"><small><strong>Passport img</strong></small></div>';
+
+        }
+    })
+
+    const validateChecked = function () {
+        if (confirmed.checked === true) {
+            return bookRoom.disabled = false
+        }
+        bookRoom.disabled = true
+    }
+    validateChecked()
+
+    confirmed.addEventListener('click', function (e) {
+        validateChecked()
+    })
+
+</script>

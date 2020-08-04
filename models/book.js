@@ -31,6 +31,10 @@ const bookSchema = new Schema({
     type: String,
     required: true,
   },
+  passport_img: {
+    type: String,
+    required: true,
+  },
   date: {
     type: Date,
     default: Date.now,

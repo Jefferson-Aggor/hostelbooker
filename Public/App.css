@@ -674,22 +674,22 @@ table th {
 .main-image {
   border: 4px solid #999;
   border-radius: 5px;
-  margin-bottom: 1rem;
-  min-height: 300px;
+  margin-bottom: 0rem;
+  min-height: 200px;
   background-color: #666;
 }
 
 .sub-images {
   display: flex;
 
-  padding: 0 1rem;
+  padding: 0 0.5rem;
 }
 .sub-images #photo-1-placeholder,
 .sub-images #photo-2-placeholder,
 .sub-images #photo-3-placeholder,
 .sub-images #photo-4-placeholder {
-  height: 100px;
-  width: 100px;
+  max-height: 100px;
+  max-width: 100px;
   background-color: #f3f3f3;
   margin: 0.5rem;
 }
@@ -702,6 +702,30 @@ table th {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+#booking-image {
+  display: flex;
+  justify-content: flex-end;
+}
+#booking-image label {
+  max-height: 150px;
+  max-width: 150px;
+  min-height: 100px;
+  min-width: 100px;
+  background-color: #f4f4f4;
+  border: dashed 1px #888;
+}
+#profile_img {
+  display: none;
+}
+.passport_img {
+  max-height: 100%;
+  width: 100%;
+  object-fit: scale-down;
+}
+.text-placeholder {
+  height: 100%;
 }
 /* Mobile Styles */
 

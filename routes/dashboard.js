@@ -12,7 +12,7 @@ const Book = mongoose.model("book");
 
 // require files
 const validateCheckbox = require("../helpers/checkboxValidation");
-const { multerDestination } = require("../helpers/helpers");
+const { multerDestination, multerDiskstorage } = require("../helpers/helpers");
 const { cloudinaryConfig } = require("../config/cloudinary");
 cloudinaryConfig;
 
@@ -74,7 +74,7 @@ const eagerOptions = { eager: [{ quality: 60 }] };
 // post room
 router.post(
   "/rooms",
-  multerDestination("./room-images").single("image"),
+  multerDiskstorage("Public/uploads/room-images").array("image"),
   (req, res) => {
     const {
       room,
@@ -88,37 +88,44 @@ router.post(
       monoBeds,
     } = req.body;
 
-    // set image to cloudinary
-    cloudinary.uploader.upload(req.file.path, eagerOptions, (err, result) => {
-      if (err) {
-        req.flash("error_msg", "Failed to upload photo. Try again");
+    const newRoom = {
+      room,
+      price,
+      description,
+      porch: validateCheckbox(porch, "on"),
+      wardrobe: validateCheckbox(wardrobe, "on"),
+      mono_beds: validateCheckbox(monoBeds, "on"),
+      bathroomInside: validateCheckbox(bathroom, "on"),
+      ac: validateCheckbox(ac, "on"),
+      kitchen: validateCheckbox(kitchen, "on"),
+      hostel: req.user._id,
+    };
+
+    if (req.files[0]) {
+      newRoom.mainRoomImage = req.files[0].filename;
+    }
+    if (req.files[1]) {
+      newRoom.photo_1 = req.files[1].filename;
+    }
+    if (req.files[2]) {
+      newRoom.photo_2 = req.files[2].filename;
+    }
+    if (req.files[3]) {
+      newRoom.photo_3 = req.files[3].filename;
+    }
+    if (req.files[4]) {
+      newRoom.photo_4 = req.files[4].filename;
+    }
+    new Room(newRoom)
+      .save()
+      .then((room) => {
+        req.flash("success_msg", "Room added !!");
         res.redirect("/hb/dashboard");
-      } else {
-        const newRoom = {
-          room,
-          price,
-          description,
-          porch: validateCheckbox(porch, "on"),
-          wardrobe: validateCheckbox(wardrobe, "on"),
-          mono_beds: validateCheckbox(monoBeds, "on"),
-          bathroomInside: validateCheckbox(bathroom, "on"),
-          ac: validateCheckbox(ac, "on"),
-          kitchen: validateCheckbox(kitchen, "on"),
-          mainRoomImage: result.eager[0].secure_url,
-          hostel: req.user._id,
-        };
-        new Room(newRoom)
-          .save()
-          .then((room) => {
-            req.flash("success_msg", "Room added !!");
-            res.redirect("/hb/dashboard");
-          })
-          .catch((err) => {
-            req.flash("error_msg", "Room not added!!");
-            res.redirect("/hb/dashboard");
-          });
-      }
-    });
+      })
+      .catch((err) => {
+        req.flash("error_msg", "Room not added!!");
+        res.redirect("/hb/dashboard");
+      });
   }
 );
 
@@ -126,49 +133,36 @@ router.post(
 router.put(
   "/edit/:_id",
   requireLogin,
-  multerDestination("./room-images/edited").single("image"),
+  multerDiskstorage("Public/uploads/room-images").array("image"),
   (req, res) => {
     Room.findOne({ _id: req.params._id }).then((room) => {
-      if (req.file) {
-        cloudinary.uploader.upload(
-          req.file.path,
-          eagerOptions,
-          (error, result) => {
-            if (error) {
-              req.flash("error_msg", "Something bad happened. Try again");
-              res.redirect(`/hb/dashboard/edit/${req.params._id}`);
-            } else {
-              (room.room = req.body.room),
-                (room.price = req.body.price),
-                (room.description = req.body.description),
-                (room.porch = validateCheckbox(req.body.porch, "on")),
-                (room.wardrobe = validateCheckbox(req.body.wardrobe, "on")),
-                (room.ac = validateCheckbox(req.body.ac, "on")),
-                (room.mono_beds = validateCheckbox(req.body.monoBeds, "on")),
-                (room.bathroomInside = validateCheckbox(
-                  req.body.bathroom,
-                  "on"
-                )),
-                (room.kitchen = validateCheckbox(req.body.kitchen, "on")),
-                (room.mainRoomImage = result.eager[0].secure_url);
-
-              room
-                .save()
-                .then((editted) => {
-                  req.flash(
-                    "success_msg",
-                    "Room has been updated. Back to dashboard"
-                  );
-                  res.redirect(`/hb/dashboard/`);
-                })
-                .catch((err) => {
-                  req.flash("error_msg", "Something bad happened. Try again");
-                  res.redirect(`/hb/dashboard/edit/${req.params._id}`);
-                });
-            }
-          }
-        );
-      } else {
+      console.log(req.files);
+      if (req.files) {
+        if (req.files[0]) {
+          room.mainRoomImage = req.files[0].filename;
+        } else {
+          room.mainRoomImage = room.mainRoomImage;
+        }
+        if (req.files[1]) {
+          room.photo_1 = req.files[1].filename;
+        } else {
+          room.photo_1 = room.photo_1;
+        }
+        if (req.files[2]) {
+          room.photo_2 = req.files[2].filename;
+        } else {
+          room.photo_2 = room.photo_2;
+        }
+        if (req.files[3]) {
+          room.photo_3 = req.files[3].filename;
+        } else {
+          room.photo_3 = room.photo_3;
+        }
+        if (req.files[4]) {
+          room.photo_4 = req.files[4].filename;
+        } else {
+          room.photo_4 = room.photo_4;
+        }
         (room.room = req.body.room),
           (room.price = req.body.price),
           (room.description = req.body.description),
@@ -177,20 +171,20 @@ router.put(
           (room.ac = validateCheckbox(req.body.ac, "on")),
           (room.mono_beds = validateCheckbox(req.body.monoBeds, "on")),
           (room.bathroomInside = validateCheckbox(req.body.bathroom, "on")),
-          (room.kitchen = validateCheckbox(req.body.kitchen, "on")),
-          room
-            .save()
-            .then((editted) => {
-              req.flash(
-                "success_msg",
-                "Room has been updated. Back to dashboard"
-              );
-              res.redirect(`/hb/dashboard/`);
-            })
-            .catch((err) => {
-              req.flash("error_msg", "Something bad happened. Try again");
-              res.redirect(`/hb/dashboard/edit/${req.params._id}`);
-            });
+          (room.kitchen = validateCheckbox(req.body.kitchen, "on"));
+
+        room
+          .save()
+          .then((editted) => {
+            console.log(editted);
+            req.flash("success_msg", "Room has been updated.");
+            res.redirect(`/hb/dashboard/`);
+          })
+          .catch((err) => {
+            console.log(err);
+            req.flash("error_msg", "Something bad happened. Try again");
+            res.redirect(`/hb/dashboard/edit/${req.params._id}`);
+          });
       }
     });
   }

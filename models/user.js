@@ -24,6 +24,11 @@ const userSchema = new Schema({
   },
   mainImage: {
     type: String,
+    required: true,
+  },
+  terms_and_conditions: {
+    type: String,
+    required: true,
   },
   password: {
     type: String,

@@ -5,6 +5,7 @@ const passport = require("passport");
 const bcrypt = require("bcryptjs");
 const cloudinary = require("cloudinary").v2;
 const nodemailer = require("nodemailer");
+const path = require("path");
 const router = express.Router();
 
 // require models
@@ -16,7 +17,7 @@ const Room = mongoose.model("room");
 const Book = mongoose.model("book");
 
 // multer
-const { multerDestination } = require("../helpers/helpers");
+const { multerDestination, multerDiskstorage } = require("../helpers/helpers");
 // cloudinary
 const { cloudinaryConfig } = require("../config/cloudinary");
 cloudinaryConfig;
@@ -108,6 +109,7 @@ router.post(
           phone,
           location,
           description,
+          terms_and_conditions,
           password,
         };
 
@@ -164,36 +166,41 @@ router.post(
 );
 
 // Book a room
-router.post("/hb/book-room/:_id", (req, res) => {
-  const {
-    name,
-    email,
-    contact,
-    roomType,
-    expectations,
-    hostel_id,
-    room_id,
-    hostel_name,
-    hostel_email,
-    price,
-    sex,
-  } = req.body;
-  const newBooking = {
-    name,
-    email,
-    contact,
-    roomType,
-    expectations,
-    sex,
-    room: room_id,
-    hostel: hostel_id,
-  };
-  Book.findOne({ name, email, hostel: hostel_id }).then((booked) => {
-    if (!booked) {
-      new Book(newBooking)
-        .save()
-        .then((book) => {
-          const output = `
+router.post(
+  "/hb/book-room/:_id",
+  multerDiskstorage("Public/uploads/").single("profile_img"),
+  (req, res) => {
+    const {
+      name,
+      email,
+      contact,
+      roomType,
+      expectations,
+      hostel_id,
+      room_id,
+      hostel_name,
+      hostel_email,
+      price,
+      sex,
+    } = req.body;
+    const newBooking = {
+      name,
+      email,
+      contact,
+      roomType,
+      expectations,
+      sex,
+      passport_img: req.file.filename,
+      room: room_id,
+      hostel: hostel_id,
+    };
+
+    Book.findOne({ email, hostel: hostel_id }).then((booked) => {
+      if (!booked) {
+        new Book(newBooking)
+          .save()
+          .then((book) => {
+            const output = `
               <p class='text-success'>Room Has been booked</p>
               <p>Your request to book a room has been made.</p>
               <p>Hostel: <strong>${hostel_name}</p></strong></p>
@@ -202,7 +209,7 @@ router.post("/hb/book-room/:_id", (req, res) => {
               <p>You Booked a room with <strong>${hostel_name}</strong> on ${book.date}. </p>
               <p>${hostel_name}'s management will get back to you soon. Thank You</p>
               `;
-          let bookOutput = `
+            let bookOutput = `
             <p class='text-success'>Booking has been made</p>
             <h3>DETAILS</h3>
             <p>Booked By: <strong>${name}</p></strong>
@@ -214,62 +221,63 @@ router.post("/hb/book-room/:_id", (req, res) => {
             <hr>
             Go to your dashboard for more info <a href=${"https://asktheporter.herokuapp.com/hb/login"}>Go to dashboard</a>
             `;
-          let transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-              user: process.env.NODEMAILER_EMAIL,
-              pass: process.env.NODEMAILER_PASSWORD,
-            },
-            tls: {
-              rejectUnauthorized: false,
-            },
+            let transporter = nodemailer.createTransport({
+              service: "gmail",
+              auth: {
+                user: process.env.NODEMAILER_EMAIL,
+                pass: process.env.NODEMAILER_PASSWORD,
+              },
+              tls: {
+                rejectUnauthorized: false,
+              },
+            });
+
+            let mailOptions = {
+              from: "asktheporter.co ",
+              to: `<${book.email}>`,
+              subject: "Hostel Has Been Booked",
+              html: output,
+            };
+
+            let mailToHostel = {
+              from: "asktheporter.co",
+              to: `<${hostel_email}>`,
+              subject: "Booking Has Been Made",
+              html: bookOutput,
+            };
+
+            transporter.sendMail(mailToHostel, function (err, data) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log("email has been sent");
+              }
+            });
+            transporter.sendMail(mailOptions, function (err, data) {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log("email has been sent to hostel");
+              }
+            });
+
+            req.flash(
+              "success_msg",
+              "Booking made. We will get back to you soon"
+            );
+            res.redirect(`/hb/view-room/${req.params._id}`);
+          })
+          .catch((err) => {
+            req.flash("error_msg", "Something bad happened,try again");
+            res.redirect(`/hb/view-room/${req.params._id}`);
           });
-
-          let mailOptions = {
-            from: "asktheporter.co ",
-            to: `<${book.email}>`,
-            subject: "Hostel Has Been Booked",
-            html: output,
-          };
-
-          let mailToHostel = {
-            from: "asktheporter.co",
-            to: `<${hostel_email}>`,
-            subject: "Booking Has Been Made",
-            html: bookOutput,
-          };
-
-          transporter.sendMail(mailToHostel, function (err, data) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("email has been sent");
-            }
-          });
-          transporter.sendMail(mailOptions, function (err, data) {
-            if (err) {
-              console.log(err);
-            } else {
-              console.log("email has been sent to hostel");
-            }
-          });
-
-          req.flash(
-            "success_msg",
-            "Booking made. We will get back to you soon"
-          );
-          res.redirect(`/hb/view-room/${req.params._id}`);
-        })
-        .catch((err) => {
-          req.flash("error_msg", "Something bad happened,try again");
-          res.redirect(`/hb/view-room/${req.params._id}`);
-        });
-    } else {
-      req.flash("error_msg", "You've booked a room in this hostel already");
-      res.redirect(`/hb/view-room/${req.params._id}`);
-    }
-  });
-});
+      } else {
+        req.flash("error_msg", "You've booked a room in this hostel already");
+        res.redirect(`/hb/view-room/${req.params._id}`);
+      }
+    });
+  }
+);
 
 // Hostel Login
 router.post("/hb/login", (req, res, next) => {

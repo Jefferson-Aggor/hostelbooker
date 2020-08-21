@@ -74,7 +74,7 @@ const eagerOptions = { eager: [{ quality: 50 }] };
 // post room
 router.post(
   "/rooms",
-  multerDestination("/uploads/room-images").array("image"),
+  multerDestination("./uploads/room-images").array("image"),
   (req, res) => {
     const {
       room,
@@ -188,7 +188,7 @@ router.post(
 router.put(
   "/edit/:_id",
   requireLogin,
-  multerDestination("Public/uploads/room-images").array("image"),
+  multerDestination("./uploads/room-images").array("image"),
   (req, res) => {
     Room.findOne({ _id: req.params._id }).then((room) => {
       (room.room = req.body.room),

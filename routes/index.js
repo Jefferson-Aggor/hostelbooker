@@ -174,7 +174,7 @@ router.post(
 // Book a room
 router.post(
   "/hb/book-room/:_id",
-  multerDestination("/uploads/passport_img").single("profile_img"),
+  multerDestination("./uploads/passport_img").single("profile_img"),
   (req, res) => {
     const {
       name,

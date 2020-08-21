@@ -77,7 +77,7 @@ router.get("/hb/view-room/:_id", (req, res) => {
   Room.findOne({ _id: req.params._id })
     .populate({
       path: "hostel",
-      select: "name location",
+      select: "name location mainImage",
     })
     .then((room) => {
       res.render("index/view-room", { room, path: req.path });

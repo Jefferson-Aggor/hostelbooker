@@ -115,7 +115,6 @@ router.post(
           phone,
           location,
           description,
-          terms_and_conditions,
           password,
         };
 

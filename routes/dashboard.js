@@ -9,6 +9,7 @@ require("../models/book");
 
 const Room = mongoose.model("room");
 const Book = mongoose.model("book");
+const Hostel = mongoose.model("user");
 
 // require files
 const validateCheckbox = require("../helpers/checkboxValidation");
@@ -297,6 +298,23 @@ router.delete("/delete/:_id", (req, res) => {
       req.flash("error_msg", "Something bad happened. Try again");
       res.redirect("/hb/dashboard");
     });
+});
+// delete hostel;
+router.delete("/delete-hostel/:_id", async (req, res) => {
+  try {
+    const hostel = await Hostel.findOne({ _id: req.params._id });
+
+    if (!hostel) {
+      return res.render("helpers/errors", { msg: "Hostel not found" });
+    }
+
+    hostel.remove();
+    req.flash("success_msg", "Hostel has been deleted");
+    res.redirect("/hb/register");
+  } catch (err) {
+    req.flash("error_msg", "Hostel could not be deleted");
+    res.redirect("/hb/dashboard");
+  }
 });
 
 module.exports = router;

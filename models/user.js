@@ -26,10 +26,6 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  terms_and_conditions: {
-    type: String,
-    required: true,
-  },
   password: {
     type: String,
     required: true,
@@ -40,4 +36,8 @@ const userSchema = new Schema({
   },
 });
 
+userSchema.pre("remove", async function (next) {
+  await this.model("room").deleteMany({ hostel: this._id });
+  next();
+});
 mongoose.model("user", userSchema);

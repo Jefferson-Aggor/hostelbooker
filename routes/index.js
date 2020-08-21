@@ -52,7 +52,10 @@ router.get("/hb/locality-hostels/:location", (req, res) => {
 // view a particular hostel
 router.get("/hb/view-hostel/:_id", (req, res) => {
   Room.find({ hostel: req.params._id })
-    .populate("hostel")
+    .populate({
+      path: "hostel",
+      select: "name location",
+    })
     .then((room) => {
       if (room) {
         let user = room.filter((x) => x.hostel.name)[0];
@@ -72,7 +75,10 @@ router.get("/hb/view-hostel/:_id", (req, res) => {
 
 router.get("/hb/view-room/:_id", (req, res) => {
   Room.findOne({ _id: req.params._id })
-    .populate("hostel")
+    .populate({
+      path: "hostel",
+      select: "name location",
+    })
     .then((room) => {
       res.render("index/view-room", { room, path: req.path });
     })
@@ -82,7 +88,7 @@ router.get("/hb/view-room/:_id", (req, res) => {
 });
 
 // Register Hostel @ /hb/register
-const eagerOptions = { eager: [{ quality: 60 }] };
+const eagerOptions = { eager: [{ quality: 50 }] };
 router.post(
   "/hb/register",
   multerDestination("./hostel-images").single("main-image"),
@@ -168,7 +174,7 @@ router.post(
 // Book a room
 router.post(
   "/hb/book-room/:_id",
-  multerDiskstorage("Public/uploads/passport_img").single("profile_img"),
+  multerDestination("/uploads/passport_img").single("profile_img"),
   (req, res) => {
     const {
       name,
@@ -190,91 +196,97 @@ router.post(
       roomType,
       expectations,
       sex,
-      passport_img: req.file.filename,
       room: room_id,
       hostel: hostel_id,
     };
-
-    Book.findOne({ email, hostel: hostel_id }).then((booked) => {
-      if (!booked) {
-        new Book(newBooking)
-          .save()
-          .then((book) => {
-            const output = `
-              <p class='text-success'>Room Has been booked</p>
-              <p>Your request to book a room has been made.</p>
-              <p>Hostel: <strong>${hostel_name}</p></strong></p>
-              <p>Room Type Selected : <strong>${book.roomType}</strong></p>
-              <p>Price :ghs <span><strong>${price}<strong></span></p>
-              <p>You Booked a room with <strong>${hostel_name}</strong> on ${book.date}. </p>
-              <p>${hostel_name}'s management will get back to you soon. Thank You</p>
-              `;
-            let bookOutput = `
-            <p class='text-success'>Booking has been made</p>
-            <h3>DETAILS</h3>
-            <p>Booked By: <strong>${name}</p></strong>
-            <p>Room Type : <strong>${roomType} </p></strong>
-            <p>Email : <strong>${email} </p></strong>
-            <p>Phone : <strong>${contact} </p><strong>
-            <p>Sex : <strong>${sex} </p><strong>
-            <p>Expectations : <strong>${expectations} </p><strong>
-            <hr>
-            Go to your dashboard for more info <a href=${"https://asktheporter.herokuapp.com/hb/login"}>Go to dashboard</a>
-            `;
-            let transporter = nodemailer.createTransport({
-              service: "gmail",
-              auth: {
-                user: process.env.NODEMAILER_EMAIL,
-                pass: process.env.NODEMAILER_PASSWORD,
-              },
-              tls: {
-                rejectUnauthorized: false,
-              },
-            });
-
-            let mailOptions = {
-              from: "asktheporter.co ",
-              to: `<${book.email}>`,
-              subject: "Hostel Has Been Booked",
-              html: output,
-            };
-
-            let mailToHostel = {
-              from: "asktheporter.co",
-              to: `<${hostel_email}>`,
-              subject: "Booking Has Been Made",
-              html: bookOutput,
-            };
-
-            transporter.sendMail(mailToHostel, function (err, data) {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log("email has been sent");
-              }
-            });
-            transporter.sendMail(mailOptions, function (err, data) {
-              if (err) {
-                console.log(err);
-              } else {
-                console.log("email has been sent to hostel");
-              }
-            });
-
-            req.flash(
-              "success_msg",
-              "Booking made. We will get back to you soon"
-            );
-            res.redirect(`/hb/view-room/${req.params._id}`);
-          })
-          .catch((err) => {
-            req.flash("error_msg", "Something bad happened,try again");
-            res.redirect(`/hb/view-room/${req.params._id}`);
-          });
+    cloudinary.uploader.upload(req.file.path, eagerOptions, (err, result) => {
+      if (err) {
+        console.log(err.message);
       } else {
-        req.flash("error_msg", "You've booked a room in this hostel already");
-        res.redirect(`/hb/view-room/${req.params._id}`);
+        newBooking.passport_img = result.eager[0].secure_url;
       }
+      Book.findOne({ email, hostel: hostel_id }).then((booked) => {
+        if (!booked) {
+          new Book(newBooking)
+            .save()
+            .then((book) => {
+              console.log(book);
+              const output = `
+                <p class='text-success'>Room Has been booked</p>
+                <p>Your request to book a room has been made.</p>
+                <p>Hostel: <strong>${hostel_name}</p></strong></p>
+                <p>Room Type Selected : <strong>${book.roomType}</strong></p>
+                <p>Price :ghs <span><strong>${price}<strong></span></p>
+                <p>You Booked a room with <strong>${hostel_name}</strong> on ${book.date}. </p>
+                <p>${hostel_name}'s management will get back to you soon. Thank You</p>
+                `;
+              let bookOutput = `
+              <p class='text-success'>Booking has been made</p>
+              <h3>DETAILS</h3>
+              <p>Booked By: <strong>${name}</p></strong>
+              <p>Room Type : <strong>${roomType} </p></strong>
+              <p>Email : <strong>${email} </p></strong>
+              <p>Phone : <strong>${contact} </p><strong>
+              <p>Sex : <strong>${sex} </p><strong>
+              <p>Expectations : <strong>${expectations} </p><strong>
+              <hr>
+              Go to your dashboard for more info <a href=${"https://asktheporter.herokuapp.com/hb/login"}>Go to dashboard</a>
+              `;
+              let transporter = nodemailer.createTransport({
+                service: "gmail",
+                auth: {
+                  user: process.env.NODEMAILER_EMAIL,
+                  pass: process.env.NODEMAILER_PASSWORD,
+                },
+                tls: {
+                  rejectUnauthorized: false,
+                },
+              });
+
+              let mailOptions = {
+                from: "asktheporter.co ",
+                to: `<${book.email}>`,
+                subject: "Hostel Has Been Booked",
+                html: output,
+              };
+
+              let mailToHostel = {
+                from: "asktheporter.co",
+                to: `<${hostel_email}>`,
+                subject: "Booking Has Been Made",
+                html: bookOutput,
+              };
+
+              transporter.sendMail(mailToHostel, function (err, data) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("email has been sent");
+                }
+              });
+              transporter.sendMail(mailOptions, function (err, data) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  console.log("email has been sent to hostel");
+                }
+              });
+
+              req.flash(
+                "success_msg",
+                "Booking made. We will get back to you soon"
+              );
+              res.redirect(`/hb/view-room/${req.params._id}`);
+            })
+            .catch((err) => {
+              req.flash("error_msg", "Something bad happened,try again");
+              res.redirect(`/hb/view-room/${req.params._id}`);
+            });
+        } else {
+          req.flash("error_msg", "You've booked a room in this hostel already");
+          res.redirect(`/hb/view-room/${req.params._id}`);
+        }
+      });
     });
   }
 );

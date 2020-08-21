@@ -40,7 +40,7 @@
                         <td><a href="mailto:{{email}}">{{email}}</a></td>
                         <td><a href="tel:{{contact}}">{{contact}}</a></td>
                         {{#if passport_img}}
-                        <td><a href="/uploads/passport_img/{{passport_img}}" data-lightbox="{{passport_img}}">View
+                        <td><a href="{{passport_img}}" data-lightbox="{{passport_img}}">View
                                 Image</a></td>
                         {{else}}
                         <td>No Image</td>
@@ -79,7 +79,7 @@
                     <tr>
                         <th scope="row"><a href="/hb/view-room/{{_id}}">{{room}}</a> </th>
                         <td>ghs <strong>{{price}}</strong></td>
-                        <td><a href="/uploads/room-images/{{mainRoomImage}}" data-lightbox="{{_id}}">View Image</a></td>
+                        <td><a href="{{mainRoomImage}}" data-lightbox="{{_id}}">View Image</a></td>
                         <td>{{formatDate date}}</td>
                         <td class="text-center">
                             <span><a href="/hb/dashboard/edit/{{_id}}"><i

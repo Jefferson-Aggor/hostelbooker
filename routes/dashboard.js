@@ -70,11 +70,11 @@ router.get("/edit/:_id", requireLogin, (req, res) => {
     });
 });
 
-const eagerOptions = { eager: [{ quality: 60 }] };
+const eagerOptions = { eager: [{ quality: 50 }] };
 // post room
 router.post(
   "/rooms",
-  multerDiskstorage("Public/uploads/room-images").array("image"),
+  multerDestination("/uploads/room-images").array("image"),
   (req, res) => {
     const {
       room,
@@ -100,32 +100,87 @@ router.post(
       kitchen: validateCheckbox(kitchen, "on"),
       hostel: req.user._id,
     };
+    async function saveImages() {
+      if (req.files[0]) {
+        await cloudinary.uploader.upload(
+          req.files[0].path,
+          eagerOptions,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              newRoom.mainRoomImage = result.eager[0].secure_url;
+              console.log(result.eager[0].secure_url);
+            }
+          }
+        );
+      }
+      if (req.files[1]) {
+        await cloudinary.uploader.upload(
+          req.files[1].path,
+          eagerOptions,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              newRoom.photo_1 = result.eager[0].secure_url;
+            }
+          }
+        );
+      }
+      if (req.files[2]) {
+        await cloudinary.uploader.upload(
+          req.files[2].path,
+          eagerOptions,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              newRoom.photo_2 = result.eager[0].secure_url;
+            }
+          }
+        );
+      }
+      if (req.files[3]) {
+        await cloudinary.uploader.upload(
+          req.files[3].path,
+          eagerOptions,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              newRoom.photo_3 = result.eager[0].secure_url;
+            }
+          }
+        );
+      }
+      if (req.files[4]) {
+        await cloudinary.uploader.upload(
+          req.files[4].path,
+          eagerOptions,
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              newRoom.photo_4 = result.eager[0].secure_url;
+            }
+          }
+        );
+      }
+    }
 
-    if (req.files[0]) {
-      newRoom.mainRoomImage = req.files[0].filename;
-    }
-    if (req.files[1]) {
-      newRoom.photo_1 = req.files[1].filename;
-    }
-    if (req.files[2]) {
-      newRoom.photo_2 = req.files[2].filename;
-    }
-    if (req.files[3]) {
-      newRoom.photo_3 = req.files[3].filename;
-    }
-    if (req.files[4]) {
-      newRoom.photo_4 = req.files[4].filename;
-    }
-    new Room(newRoom)
-      .save()
-      .then((room) => {
-        req.flash("success_msg", "Room added !!");
-        res.redirect("/hb/dashboard");
-      })
-      .catch((err) => {
-        req.flash("error_msg", "Room not added!!");
-        res.redirect("/hb/dashboard");
-      });
+    saveImages().then((images) => {
+      new Room(newRoom)
+        .save()
+        .then((room) => {
+          req.flash("success_msg", "Room added !!");
+          res.redirect("/hb/dashboard");
+        })
+        .catch((err) => {
+          req.flash("error_msg", "Room not added!!");
+          res.redirect("/hb/dashboard");
+        });
+    });
   }
 );
 
@@ -133,46 +188,87 @@ router.post(
 router.put(
   "/edit/:_id",
   requireLogin,
-  multerDiskstorage("Public/uploads/room-images").array("image"),
+  multerDestination("Public/uploads/room-images").array("image"),
   (req, res) => {
     Room.findOne({ _id: req.params._id }).then((room) => {
-      console.log(req.files);
-      if (req.files) {
+      (room.room = req.body.room),
+        (room.price = req.body.price),
+        (room.description = req.body.description),
+        (room.porch = validateCheckbox(req.body.porch, "on")),
+        (room.wardrobe = validateCheckbox(req.body.wardrobe, "on")),
+        (room.ac = validateCheckbox(req.body.ac, "on")),
+        (room.mono_beds = validateCheckbox(req.body.monoBeds, "on")),
+        (room.bathroomInside = validateCheckbox(req.body.bathroom, "on")),
+        (room.kitchen = validateCheckbox(req.body.kitchen, "on"));
+      async function saveImages() {
         if (req.files[0]) {
-          room.mainRoomImage = req.files[0].filename;
-        } else {
-          room.mainRoomImage = room.mainRoomImage;
+          await cloudinary.uploader.upload(
+            req.files[0].path,
+            eagerOptions,
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                room.mainRoomImage = result.eager[0].secure_url;
+              }
+            }
+          );
         }
         if (req.files[1]) {
-          room.photo_1 = req.files[1].filename;
-        } else {
-          room.photo_1 = room.photo_1;
+          await cloudinary.uploader.upload(
+            req.files[1].path,
+            eagerOptions,
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                room.photo_1 = result.eager[0].secure_url;
+              }
+            }
+          );
         }
         if (req.files[2]) {
-          room.photo_2 = req.files[2].filename;
-        } else {
-          room.photo_2 = room.photo_2;
+          await cloudinary.uploader.upload(
+            req.files[2].path,
+            eagerOptions,
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                room.photo_2 = result.eager[0].secure_url;
+              }
+            }
+          );
         }
         if (req.files[3]) {
-          room.photo_3 = req.files[3].filename;
-        } else {
-          room.photo_3 = room.photo_3;
+          await cloudinary.uploader.upload(
+            req.files[3].path,
+            eagerOptions,
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                room.photo_3 = result.eager[0].secure_url;
+              }
+            }
+          );
         }
         if (req.files[4]) {
-          room.photo_4 = req.files[4].filename;
-        } else {
-          room.photo_4 = room.photo_4;
+          await cloudinary.uploader.upload(
+            req.files[4].path,
+            eagerOptions,
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                room.photo_4 = result.eager[0].secure_url;
+              }
+            }
+          );
         }
-        (room.room = req.body.room),
-          (room.price = req.body.price),
-          (room.description = req.body.description),
-          (room.porch = validateCheckbox(req.body.porch, "on")),
-          (room.wardrobe = validateCheckbox(req.body.wardrobe, "on")),
-          (room.ac = validateCheckbox(req.body.ac, "on")),
-          (room.mono_beds = validateCheckbox(req.body.monoBeds, "on")),
-          (room.bathroomInside = validateCheckbox(req.body.bathroom, "on")),
-          (room.kitchen = validateCheckbox(req.body.kitchen, "on"));
+      }
 
+      saveImages().then((images) => {
         room
           .save()
           .then((editted) => {
@@ -185,7 +281,7 @@ router.put(
             req.flash("error_msg", "Something bad happened. Try again");
             res.redirect(`/hb/dashboard/edit/${req.params._id}`);
           });
-      }
+      });
     });
   }
 );
@@ -198,7 +294,6 @@ router.delete("/delete/:_id", (req, res) => {
       res.redirect(`/hb/dashboard`);
     })
     .catch((err) => {
-      res.render("helpers/error", { msg: "Could not delete room. Try again" });
       req.flash("error_msg", "Something bad happened. Try again");
       res.redirect("/hb/dashboard");
     });
